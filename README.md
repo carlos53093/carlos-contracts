@@ -29,3 +29,4 @@ Tested in 2 contracts:
         avg gasFee in calling function => 51388
         total gasFee in calling function 6 times => 308,328
 
+![image](https://user-images.githubusercontent.com/94333672/192351731-ff4749e5-e719-4ec5-8a12-e433f33c290c.png)
