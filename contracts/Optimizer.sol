@@ -36,7 +36,9 @@ contract OptimizerTest {
     uint256 _store;
 
     function store(uint256 value, uint256 offset, uint256 size) external {
-        _store = _store.storeNumber(value, offset, size);
+        uint tmp = _store;
+        tmp.storeNumber(value, offset, size);
+        _store = tmp;
     }
 
     function restore(uint256 offset, uint256 size) external view returns(uint256) {
