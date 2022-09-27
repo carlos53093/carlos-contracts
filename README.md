@@ -15,5 +15,5 @@
         4 input value => restoreNumber(8888888, 20), gasFee => 329
         5 input value => restoreNumber(123456789, 44), gasFee => 329
 
-        avg gasFee in calling function => 29508
-        total gasFee in calling function 6 times => 177,048
+        avg gasFee in calling function => 30424
+        total gasFee in calling function 5 times => 125,108
