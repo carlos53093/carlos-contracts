@@ -6,27 +6,36 @@ pragma solidity ^0.8.12;
 library Optimizer{
     error InvalidOffset();
     error InvalidSize();
-    function storeNumber(uint256 store, uint256 value, uint256 offset, uint256 size) internal pure returns(uint256) {
-        if(offset>=256) {
+    function storeNumber(uint256 store, uint256 value, uint8 offset, uint8 size) internal pure returns(uint256) {
+        if(offset > 0xff) {
             revert InvalidOffset();
         }
-        if(size>=256 || size==0) {
+        if(size>0xff || size==0) {
             revert InvalidSize();
         }
-        value <<= offset;
-        store &= ( ~(((1 << size) - 1) << offset) );
-        return store |= value;
+        assembly{
+            store := or(and(store, not(shl(offset, sub(shl(size, 1), 1)))), shl(offset, value))
+        }
+        return store;
+
+        // value <<= offset;
+        // store &= ( ~(((1 << size) - 1) << offset) );
+        // return store |= value;
     }
 
-    function restoreNumber(uint256 store, uint256 offset, uint256 size) internal pure returns(uint256) {
-        if(offset>=256) {
+    function restoreNumber(uint256 store, uint8 offset, uint8 size) internal pure returns(uint256) {
+        if(offset > 0xff) {
             revert InvalidOffset();
         }
-        if(size>=256 || size==0) {
+        if(offset > 0xff || size == 0) {
             revert InvalidSize();
         }
-        store>>=offset;
-        return store &= ((1 << size) - 1);
+        assembly{
+            store := and(sub(shl(size, 1), 1), shr(offset, store))
+        }
+        return store;
+        // store>>=offset;
+        // return store &= ((1 << size) - 1);
     }
 }
 
@@ -35,13 +44,13 @@ contract OptimizerTest {
     
     uint256 _store;
 
-    function store(uint256 value, uint256 offset, uint256 size) external {
-        uint tmp = _store;
-        tmp.storeNumber(value, offset, size);
-        _store = tmp;
+    function store(uint256 value, uint8 offset, uint8 size) external {
+        // _store.restoreNumber(offset, size);
+        _store = _store.storeNumber(value, offset, size);
+        // _store = value;
     }
 
-    function restore(uint256 offset, uint256 size) external view returns(uint256) {
+    function restore(uint8 offset, uint8 size) external view returns(uint256) {
         uint tmp = _store;
         return tmp.restoreNumber(offset, size);
     }
