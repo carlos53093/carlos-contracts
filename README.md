@@ -4,10 +4,10 @@
 
 | mode | gasfee in store | gasfee in restore |
 | ------ | ------ | ------ |
-| using bitwise operation |  2367 | 2340 |
-| using bitwise operation (remove if conditions) |  2314 | 2289 |
-| using assembly |  2277 | 2253 |
-| using uint8 instead of uint256 (remove if conditions) |  10 | 2184 |
+| using bitwise operation |  276 | 249 |
+| using bitwise operation using uint8 (remove if conditions) |  211 | 186 |
+| using assembly |  186 | 162 |
+| using uint8 instead of uint256 (remove if conditions) |  60 | 45 |
 
 When using assembly for if conditions were also efficient but no more than using uint8 instead of uint256.
 When using uint8, we don't need to use require statement.

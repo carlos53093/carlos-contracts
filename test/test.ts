@@ -22,11 +22,9 @@ describe("Converter", function () {
         // We get an instance of the contract
         const [ owner ] = await ethers.getSigners();
         let tx = await Contract.connect(owner).store(100, 0, 7);
-        await tx.wait()
-        console.log('=======================event',tx.events?.filter(x=>{return x.event === "GasFee"}))
+        console.log("====================1,=============",tx)
 
         const val1 = await Contract.restore(0, 7)
         console.log("====================1,=============",val1)
-        console.log("====================1111,=============",await Contract._store())
     });
 });
