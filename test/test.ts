@@ -9,7 +9,7 @@ import { expect } from "chai";
 let Contract
 let Factory
 
-describe("Optimizer", function () {
+describe("Converter", function () {
     beforeEach(async function () {
         Factory = await ethers.getContractFactory('OptimizerTest')
         Contract = await Factory.deploy()
@@ -21,8 +21,10 @@ describe("Optimizer", function () {
 
         // We get an instance of the contract
         const [ owner ] = await ethers.getSigners();
-        let tx = await Contract.connect(owner).store(100, 0, 0);
+        let tx = await Contract.connect(owner).store(100, 0, 7);
         await tx.wait()
+        console.log('=======================event',tx.events?.filter(x=>{return x.event === "GasFee"}))
+
         const val1 = await Contract.restore(0, 7)
         console.log("====================1,=============",val1)
         console.log("====================1111,=============",await Contract._store())

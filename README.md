@@ -2,11 +2,12 @@
 
  ### OptimizerTest contract
 
-| mode | gasfee in store | gasfee in restore | deploy fee |
-| ------ | ------ | ------ | ------ |
-| using bitwise operation |  266 | 239 | 147559 |
-| using assembly |  190 | 169 | 132919 |
-| using uint8 instead of uint256 (remove requires) |  0 | 100 | 137771 |
+| mode | gasfee in store | gasfee in restore |
+| ------ | ------ | ------ |
+| using bitwise operation |  2367 | 2340 |
+| using bitwise operation (remove if conditions) |  2314 | 2289 |
+| using assembly |  2277 | 2253 |
+| using uint8 instead of uint256 (remove if conditions) |  10 | 2184 |
 
 When using assembly for if conditions were also efficient but no more than using uint8 instead of uint256.
 When using uint8, we don't need to use require statement.

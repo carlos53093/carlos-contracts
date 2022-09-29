@@ -24,7 +24,7 @@ library Optimizer{
     }
 }
 
-contract OptimizerTest {
+contract FOptimizerTest {
     using Optimizer for uint256;
     
     uint256 public _store;
