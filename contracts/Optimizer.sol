@@ -7,7 +7,7 @@ import "hardhat/console.sol";
 library Optimizer{
     error InvalidOffset();
     error InvalidSize();
-    function storeNumber(uint256 store, uint256 value, uint8 offset, uint8 size) internal pure returns(uint256) {
+    function storeNumber(uint256 store, uint256 value, uint256 offset, uint256 size) internal pure returns(uint256) {
         assembly{
             // if slt(0xff, offset) { 
             //     revert (0,0) 
@@ -31,7 +31,7 @@ library Optimizer{
         // return store |= value;
     }
 
-    function restoreNumber(uint256 store, uint8 offset, uint8 size) internal pure returns(uint256) {
+    function restoreNumber(uint256 store, uint256 offset, uint256 size) internal pure returns(uint256) {
         assembly{
             // if slt(0xff, offset) { 
             //     revert (0,0) 

@@ -8,6 +8,9 @@
 | using bitwise operation using uint8 (remove if conditions) |  211 | 186 |
 | using assembly |  186 | 162 |
 | using uint8 instead of uint256 (remove if conditions) |  60 | 45 |
+| using uint256 (remove if conditions) |  60 | 45 |
+| **when not matching params type** |  108 | 81 |
+
 
 When using assembly for if conditions were also efficient but no more than using uint8 instead of uint256.
 When using uint8, we don't need to use require statement.
@@ -20,3 +23,7 @@ are the most efficient in final.
 I pushed it into new file "FOptimizer.sol"
 
 You can check it in this file
+
+**when not matching params type it lead to gasfee higher.**
+
+**For example:**
