@@ -24,7 +24,7 @@ I pushed it into new file "FOptimizer.sol"
 
 You can check it in this file
 
-**when not matching params type it lead to gasfee higher.**
+**when not matching params type it led to gasfee higher.**
 
 **For example:**
 
