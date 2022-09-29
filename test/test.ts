@@ -11,7 +11,7 @@ let Factory
 
 describe("Converter", function () {
     beforeEach(async function () {
-        Factory = await ethers.getContractFactory('OptimizerTest')
+        Factory = await ethers.getContractFactory('ConverterTest')
         Contract = await Factory.deploy()
         console.log(Contract.address);
 
@@ -21,10 +21,10 @@ describe("Converter", function () {
 
         // We get an instance of the contract
         const [ owner ] = await ethers.getSigners();
-        let tx = await Contract.connect(owner).store(100, 0, 7);
+        let tx = await Contract.connect(owner).NumberToBigNum("5035703444687813576399599");
         console.log("====================1,=============",tx)
 
-        const val1 = await Contract.restore(0, 7)
+        const val1 = await Contract.BigNumToNum(2236301563, 51)
         console.log("====================1,=============",val1)
     });
 });

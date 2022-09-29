@@ -1,6 +1,6 @@
 # Benchmark
 
- ### OptimizerTest contract
+ ## OptimizerTest contract
 
 | mode | gasfee in store | gasfee in restore |
 | ------ | ------ | ------ |
@@ -29,3 +29,11 @@ You can check it in this file
 **For example:**
 
 ![vmplayer_mSM5qWhIXY](https://user-images.githubusercontent.com/94333672/193109482-bd565e77-1dd1-404f-bc1b-5f1be4f5b4bb.png)
+
+
+ ## ConverterTest contract
+
+ | mode | N2B | B2N |
+| ------ | ------ | ------ |
+| Mode 1 |  877 | 16 |
+| Mode 2 |  871 | 16 |
