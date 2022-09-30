@@ -38,7 +38,7 @@ library Converter{
             lastBit_ += 2;
         }
         if (number_ > 0x1) ++lastBit_;
-        ++lastBit_;
+        if (number_ > 0x0) ++lastBit_;
     }
 
     function N2B(uint256 normal) internal pure returns(uint256 coefficient, uint256 exponent, uint256 bigNumber) {
