@@ -35,5 +35,5 @@ You can check it in this file
 
  | mode | N2B | B2N |
 | ------ | ------ | ------ |
-| Mode 1 |  877 | 16 |
-| Mode 2 |  871 | 16 |
+| 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF |  661 | 16 |
+| type(uint128).max |  661 | 16 |

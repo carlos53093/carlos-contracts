@@ -21,7 +21,7 @@ describe("Converter", function () {
 
         // We get an instance of the contract
         const [ owner ] = await ethers.getSigners();
-        let tx = await Contract.connect(owner).NumberToBigNum("5035703444687813576399599");
+        let tx = await Contract.connect(owner).NumberToBigNum("8587934592");
         console.log("====================1,=============",tx)
 
         const val1 = await Contract.BigNumToNum(2236301563, 51)

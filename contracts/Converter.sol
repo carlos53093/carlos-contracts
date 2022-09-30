@@ -9,23 +9,23 @@ pragma solidity ^0.8.12;
 library Converter{
     error InvalidLen();
     function mostSignificantBit(uint256 number_) private pure returns (uint8 lastBit_) {
-        if (number_ > 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
+        if (number_ > type(uint128).max) {
             number_ >>= 128;
             lastBit_ += 128;
         }
-        if (number_ > 0xFFFFFFFFFFFFFFFF) {
+        if (number_ > type(uint64).max) {
             number_ >>= 64;
             lastBit_ += 64;
         }
-        if (number_ > 0xFFFFFFFF) {
+        if (number_ > type(uint32).max) {
             number_ >>= 32;
             lastBit_ += 32;
         }
-        if (number_ > 0xFFFF) {
+        if (number_ > type(uint16).max) {
             number_ >>= 16;
             lastBit_ += 16;
         }
-        if (number_ > 0xFF) {
+        if (number_ > type(uint8).max) {
             number_ >>= 8;
             lastBit_ += 8;
         }
@@ -42,26 +42,14 @@ library Converter{
     }
 
     function N2B(uint256 normal) internal pure returns(uint256 coefficient, uint256 exponent, uint256 bigNumber) {
-        // // mode 1
-        // uint8 len = mostSignificantBit(normal);
-        // if(len < 32) {
-        //     revert InvalidLen();
-        // }
-        // assembly{
-        //     coefficient := shr(sub(len,32), normal)
-        //     bigNumber := shl(sub(len,32), coefficient)
-        //     exponent := sub(len,0x20)
-        // }
-
-        // mode 2
         uint8 len = mostSignificantBit(normal);
         assembly{
-            if slt(len, 0x20) { 
-                revert (0,0)
+            if lt(len, 0x20) {  // for throw exception
+                len := 0x20
             }
             coefficient := shr(sub(len,0x20), normal)
-            bigNumber := shl(sub(len,0x20), coefficient)
             exponent := sub(len,0x20)
+            bigNumber := add(shl(0x08, coefficient), exponent)
         }
     }
 
