@@ -50,7 +50,7 @@ library Converter{
         // assembly{
         //     coefficient := shr(sub(len,32), normal)
         //     bigNumber := shl(sub(len,32), coefficient)
-        //     exponent := sub(normal, bigNumber)
+        //     exponent := sub(len,0x20)
         // }
 
         // mode 2
@@ -61,7 +61,7 @@ library Converter{
             }
             coefficient := shr(sub(len,0x20), normal)
             bigNumber := shl(sub(len,0x20), coefficient)
-            exponent := sub(normal, bigNumber)
+            exponent := sub(len,0x20)
         }
     }
 
