@@ -35,5 +35,6 @@ You can check it in this file
 
  | mode | N2B | B2N |
 | ------ | ------ | ------ |
-| using mostSignificantBit |  828 | 16 |
+| using mostSignificantBit |  832 | 16 |
 | using mostSignificantBitUsingAssembly |  651 | 16 |
+| using mostSignificantBitUsingAssembly logic directly |  617 | 16 |

@@ -54,56 +54,55 @@ library Converter{
             coefficient := shr(exponent, normal)
         }
         bigNumber = bigNumber.storeNumber(exponent, 0, exponentMaxSize);
-        bigNumber = bigNumber.storeNumber(coefficient, 7, coefficientMaxSize);
+        bigNumber = bigNumber.storeNumber(coefficient, exponentMaxSize, coefficientMaxSize);
     }
 
     function N2BWithMostSignificantBitUsingAssembly(uint256 normal) internal pure returns(uint256 coefficient, uint256 exponent, uint256 bigNumber) {
         assembly{
-            function mostSignificantBitUsingAssembly(number_) -> lastBit_ {
-                if gt(number_, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
-                    number_ := shr(0x80, number_)
-                    lastBit_ := add(lastBit_, 0x80)
-                }
-                if gt(number_, 0xFFFFFFFFFFFFFFFF) {
-                    number_ := shr(0x40, number_)
-                    lastBit_ := add(lastBit_, 0x40)
-                }
-                if gt(number_, 0xFFFFFFFF) {
-                    number_ := shr(0x20, number_)
-                    lastBit_ := add(lastBit_, 0x20)
-                }
-                if gt(number_, 0xFFFF) {
-                    number_ := shr(0x10, number_)
-                    lastBit_ := add(lastBit_, 0x10)
-                }
-                if gt(number_, 0xFF) {
-                    number_ := shr(0x8, number_)
-                    lastBit_ := add(lastBit_, 0x8)
-                }
-                if gt(number_, 0xF) {
-                    number_ := shr(0x4, number_)
-                    lastBit_ := add(lastBit_, 0x4)
-                }
-                if gt(number_, 0x3) {
-                    number_ := shr(0x2, number_)
-                    lastBit_ := add(lastBit_, 0x2)
-                }
-                if gt(number_, 0x1) {
-                    lastBit_ := add(lastBit_, 1)
-                }
-                if gt(number_, 0) {
-                    lastBit_ := add(lastBit_, 1)
-                }
+            let lastBit_
+            let number_ := normal
+            if gt(normal, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
+                number_ := shr(0x80, number_)
+                lastBit_ := add(lastBit_, 0x80)
             }
-            let len :=  mostSignificantBitUsingAssembly(normal)
-            if lt(len, coefficientMaxSize) {  // for throw exception
-                len := coefficientMaxSize
+            if gt(number_, 0xFFFFFFFFFFFFFFFF) {
+                number_ := shr(0x40, number_)
+                lastBit_ := add(lastBit_, 0x40)
             }
-            exponent := sub(len, coefficientMaxSize)
+            if gt(number_, 0xFFFFFFFF) {
+                number_ := shr(0x20, number_)
+                lastBit_ := add(lastBit_, 0x20)
+            }
+            if gt(number_, 0xFFFF) {
+                number_ := shr(0x10, number_)
+                lastBit_ := add(lastBit_, 0x10)
+            }
+            if gt(number_, 0xFF) {
+                number_ := shr(0x8, number_)
+                lastBit_ := add(lastBit_, 0x8)
+            }
+            if gt(number_, 0xF) {
+                number_ := shr(0x4, number_)
+                lastBit_ := add(lastBit_, 0x4)
+            }
+            if gt(number_, 0x3) {
+                number_ := shr(0x2, number_)
+                lastBit_ := add(lastBit_, 0x2)
+            }
+            if gt(number_, 0x1) {
+                lastBit_ := add(lastBit_, 1)
+            }
+            if gt(number_, 0) {
+                lastBit_ := add(lastBit_, 1)
+            }
+            if lt(lastBit_, coefficientMaxSize) {  // for throw exception
+                lastBit_ := coefficientMaxSize
+            }
+            exponent := sub(lastBit_, coefficientMaxSize)
             coefficient := shr(exponent, normal)
         }
         bigNumber = bigNumber.storeNumber(exponent, 0, exponentMaxSize);
-        bigNumber = bigNumber.storeNumber(coefficient, 7, coefficientMaxSize);
+        bigNumber = bigNumber.storeNumber(coefficient, exponentMaxSize, coefficientMaxSize);
     }
 
     function B2N(uint256 coefficient, uint256 exponent) internal pure returns(uint256 _number) {
