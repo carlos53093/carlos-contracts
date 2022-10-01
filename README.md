@@ -35,5 +35,5 @@ You can check it in this file
 
  | mode | N2B | B2N |
 | ------ | ------ | ------ |
-| 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF |  661 | 16 |
-| type(uint128).max |  661 | 16 |
+| using mostSignificantBit |  828 | 16 |
+| using mostSignificantBitUsingAssembly |  651 | 16 |
