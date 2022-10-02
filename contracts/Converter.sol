@@ -63,7 +63,7 @@ library Converter{
             let number_ := normal
             if gt(normal, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
                 number_ := shr(0x80, number_)
-                lastBit_ := add(lastBit_, 0x80)
+                lastBit_ := 0x80
             }
             if gt(number_, 0xFFFFFFFFFFFFFFFF) {
                 number_ := shr(0x40, number_)

@@ -38,3 +38,4 @@ You can check it in this file
 | using mostSignificantBit |  832 | 16 |
 | using mostSignificantBitUsingAssembly |  651 | 16 |
 | using mostSignificantBitUsingAssembly logic directly |  617 | 16 |
+| using "lastBit_ := 0x80" instead of "lastBit_ := add(lastBit_, 0x80)" |  617 | 16 |
