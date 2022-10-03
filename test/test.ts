@@ -29,6 +29,9 @@ describe("Converter", function () {
         tx = await Contract.connect(owner).NumberToBigNumAsm("8587934592");
         console.log("====================1,=============",tx)
 
+        tx = await Contract.connect(owner).NumberToBigNumAsm2("8587934592");
+        console.log("====================1,=============",tx)
+
         const val1 = await Contract.BigNumToNum(2236301563, 51)
         console.log("====================1,=============",val1)
 
