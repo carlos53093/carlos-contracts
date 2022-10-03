@@ -164,6 +164,13 @@ library Converter{
             _number := shl(exponent, coefficient)
         }
     }
+    function mulDivNormal(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+        (uint256 coefficient, uint256 exponent,) = N2BWithMostSignificantBitUsingAssemblyTwo(_bigNumber1);
+        uint256 tmp1 = B2N(coefficient, exponent);
+        (uint256 coefficient2, uint256 exponent2,) = N2BWithMostSignificantBitUsingAssemblyTwo(_bigNumber2);
+        uint256 tmp2 = B2N(coefficient2, exponent2);
+        res = _number * tmp1 / tmp2;
+    }
 }
 
 contract ConverterTest {
@@ -194,5 +201,11 @@ contract ConverterTest {
         uint256 initialGas = gasleft();
         uint num = Converter.B2N(coefficient, exponent);
         return (initialGas - gasleft(), num);
+    }
+
+    function mulDivNormal(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
+        uint256 initialGas = gasleft();
+        res = _number.mulDivNormal(_bigNumber1, _bigNumber2);
+        gasUsed = initialGas - gasleft();
     }
 }

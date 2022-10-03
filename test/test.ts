@@ -14,10 +14,10 @@ let Factory2
 
 describe("Converter", function () {
     beforeEach(async function () {
-        // Factory = await ethers.getContractFactory('ConverterTest')
-        // Contract = await Factory.deploy()
-        Factory2 = await ethers.getContractFactory('OptimizerTest')
-        Contract2 = await Factory2.deploy()
+        Factory = await ethers.getContractFactory('ConverterTest')
+        Contract = await Factory.deploy()
+        // Factory2 = await ethers.getContractFactory('OptimizerTest')
+        // Contract2 = await Factory2.deploy()
     })
 
     it("testing...", async function () {
@@ -33,11 +33,11 @@ describe("Converter", function () {
         // tx = await Contract.connect(owner).NumberToBigNumAsm2("8587934592");
         // console.log("====================1,=============",tx)
 
-        // const val1 = await Contract.BigNumToNum(2236301563, 51)
-        // console.log("====================1,=============",val1)
+        const val1 = await Contract.mulDivNormal("2332387983773948", "9793278532989823979898", "6327987932873948")
+        console.log("====================1,=============",val1.toString())
 
-        const val2 = await Contract2.mulDivNormal("2332387983773948", "9793278532989823979898", "6327987932873948")
-        console.log("==============/////////=============", val2)
+        // const val2 = await Contract2.mulDivNormal("2332387983773948", "9793278532989823979898", "6327987932873948")
+        // console.log("==============/////////=============", val2)
 
     });
 });
