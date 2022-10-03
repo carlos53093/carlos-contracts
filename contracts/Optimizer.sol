@@ -53,6 +53,13 @@ library Optimizer{
         // store>>=offset;
         // return store &= ((1 << size) - 1);
     }
+
+    function mulDivNormal(uint256 _number, uint256 bigNumber1, uint256 bigNumber2 ) internal pure returns(uint256 res) {
+        assembly{
+            res := mul(_number, bigNumber1)
+            res := div(res, bigNumber2)
+        }
+    }
 }
 
 contract OptimizerTest {
@@ -65,6 +72,13 @@ contract OptimizerTest {
         store_ = Optimizer.storeNumber(store_, value, offset, size);
         uint256 gasUsed = initialGas - gasleft();
         return gasUsed;
+    }
+
+    function mulDivNormal(uint256 _number, uint256 bigNumber1, uint256 bigNumber2) external view returns(uint256 gasfee, uint256 res) {
+        uint256 initialGas = gasleft();
+        res = Optimizer.mulDivNormal(_number, bigNumber1, bigNumber2);
+        gasfee = initialGas - gasleft();
+        // return gasfee;
     }
 
     function restore(uint8 offset, uint8 size) external view returns(uint256) {
