@@ -40,8 +40,12 @@ You can check it in this file
 | using mostSignificantBitUsingAssembly logic directly |  617 | 16 |
 | using "lastBit_ := 0x80" instead of "lastBit_ := add(lastBit_, 0x80)" |  617 | 16 |
 | using N2BWithMostSignificantBitUsingAssemblyTwo |  **451** | 16 |
-| using mulDivNormal |  1281 |  |
-| using mulDivNormal2 |  489 |  |
-| using mulDivNormal3 |  313 |  |
-| using mulDivNormal4 |  280 |  |
-| using mulDivNormal5 |  214 |  |
+
+
+ | function name | gas fee |
+| ------ | ------ |
+| using mulDivNormal |  1281 |
+| using mulDivNormal2 |  489 |
+| using mulDivNormal3 |  313 |
+| using mulDivNormal4 |  280 |
+| using mulDivNormal5 |  214 |
