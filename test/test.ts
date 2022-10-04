@@ -48,6 +48,12 @@ describe("Converter", function () {
         const val5 = await Contract.mulDivNormal5("2332387983773948", "570043835946", "772459464469")
         console.log("==============mulDivNormal=============", val5)
 
+        const val6 = await Contract.mulDivNormal6("2332387983773948", "570043835946", "772459464469")
+        console.log("==============mulDivNormal=============", val6)
+
+        const val7 = await Contract.mulDivNormal7("2332387983773948", "570043835946", "772459464469")
+        console.log("==============mulDivNormal=============", val7)
+
         const test1 = await Contract.decompileBigNumber("570043835946")
         console.log(test1)
 
