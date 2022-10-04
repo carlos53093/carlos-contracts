@@ -32,12 +32,24 @@ describe("Converter", function () {
 
         // tx = await Contract.connect(owner).NumberToBigNumAsm2("8587934592");
         // console.log("====================1,=============",tx)
-
         const val1 = await Contract.mulDivNormal("2332387983773948", "9793278532989823979898", "6327987932873948")
-        console.log("====================1,=============",val1.toString())
+        console.log("==============mulDivNormal=============", val1)
 
-        // const val2 = await Contract2.mulDivNormal("2332387983773948", "9793278532989823979898", "6327987932873948")
-        // console.log("==============/////////=============", val2)
+        const val2 = await Contract.mulDivNormal2("2332387983773948", "570043835946", "772459464469")
+        console.log("====================mulDivNormal2,=============",val2)
+
+
+        const val3 = await Contract.mulDivNormal3("2332387983773948", "570043835946", "772459464469")
+        console.log("==============mulDivNormal=============", val3)
+
+        const val4 = await Contract.mulDivNormal4("2332387983773948", "570043835946", "772459464469")
+        console.log("==============mulDivNormal=============", val4)
+
+        const val5 = await Contract.mulDivNormal5("2332387983773948", "570043835946", "772459464469")
+        console.log("==============mulDivNormal=============", val5)
+
+        // const test1 = await Contract.decompileBigNumber("570043835946")
+        // console.log(test1)
 
     });
 });

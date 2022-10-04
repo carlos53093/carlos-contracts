@@ -148,9 +148,9 @@ library Converter{
             }
             exponent := sub(lastBit_, coefficientMaxSize)
             coefficient := shr(exponent, normal)
-            let tmp := shl(exponentMaxSize, coefficient)
-            tmp := add(tmp, exponent)
-             bigNumber := or(and(bigNumber, not(shl(0, sub(shl(40, 1), 1)))), shl(0, tmp))
+            bigNumber := shl(exponentMaxSize, coefficient)
+            bigNumber := add(bigNumber, exponent)
+            //  bigNumber := or(and(bigNumber, not(shl(0, sub(shl(40, 1), 1)))), shl(0, tmp))
             // bigNumber := or(and(bigNumber, not(sub(shl(40, 1), 1))), tmp)                // same gas fee as above
         }
         // uint256 tmp = coefficient << exponentMaxSize;
@@ -164,12 +164,86 @@ library Converter{
             _number := shl(exponent, coefficient)
         }
     }
+
     function mulDivNormal(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
-        (uint256 coefficient, uint256 exponent,) = N2BWithMostSignificantBitUsingAssemblyTwo(_bigNumber1);
-        uint256 tmp1 = B2N(coefficient, exponent);
+        (uint256 coefficient1, uint256 exponent1,) = N2BWithMostSignificantBitUsingAssemblyTwo(_bigNumber1);
         (uint256 coefficient2, uint256 exponent2,) = N2BWithMostSignificantBitUsingAssemblyTwo(_bigNumber2);
-        uint256 tmp2 = B2N(coefficient2, exponent2);
-        res = _number * tmp1 / tmp2;
+        if (exponent1 > exponent2) {
+            coefficient1 <<= (exponent1 - exponent2);
+        } else {
+            coefficient2 <<= (exponent2 - exponent1);
+        }
+        return _number * coefficient1 / coefficient2;
+    }
+
+    function mulDivNormal2(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+        (uint256 coefficient1, uint256 exponent1) = decompileBigNumber(_bigNumber1);
+        (uint256 coefficient2, uint256 exponent2) = decompileBigNumber(_bigNumber2);
+        if (exponent1 > exponent2) {
+            coefficient1 <<= (exponent1 - exponent2);
+        } else {
+            coefficient2 <<= (exponent2 - exponent1);
+        }
+        return _number * coefficient1 / coefficient2;
+    }
+
+    function mulDivNormal3(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+        (uint256 coefficient1, uint256 exponent1) = decompileBigNumber(_bigNumber1);
+        (uint256 coefficient2, uint256 exponent2) = decompileBigNumber(_bigNumber2);
+        assembly {
+            if gt(exponent1, exponent2) {
+                coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
+            }
+            if or(lt(exponent1, exponent2), eq(exponent1, exponent2)) {
+                coefficient2 := shl(sub(exponent2, exponent1),coefficient2)
+            }
+            res := div(mul(_number, coefficient1), coefficient2)
+        }
+    }
+
+    function mulDivNormal4(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+        // (uint256 coefficient1, uint256 exponent1) = decompileBigNumber(_bigNumber1);
+        // (uint256 coefficient2, uint256 exponent2) = decompileBigNumber(_bigNumber2);
+        assembly {
+            function decompileBigNumber(bigNumber) -> coefficient, exponent {
+                coefficient := shr(exponentMaxSize, bigNumber)
+                exponent := and(bigNumber, sub(shl(exponentMaxSize, 1),1))
+            }
+            let coefficient1, exponent1 := decompileBigNumber(_bigNumber1)
+            let coefficient2, exponent2 := decompileBigNumber(_bigNumber2)
+            if gt(exponent1, exponent2) {
+                coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
+            }
+            if or(lt(exponent1, exponent2), eq(exponent1, exponent2)) {
+                coefficient2 := shl(sub(exponent2, exponent1),coefficient2)
+            }
+            res := div(mul(_number, coefficient1), coefficient2)
+        }
+    }
+
+    function mulDivNormal5(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+        // (uint256 coefficient1, uint256 exponent1) = decompileBigNumber(_bigNumber1);
+        // (uint256 coefficient2, uint256 exponent2) = decompileBigNumber(_bigNumber2);
+        assembly {
+            let coefficient1 := shr(exponentMaxSize, _bigNumber1)
+            let exponent1 := and(_bigNumber1, sub(shl(exponentMaxSize, 1),1))
+            let coefficient2 := shr(exponentMaxSize, _bigNumber2)
+            let exponent2 := and(_bigNumber2, sub(shl(exponentMaxSize, 1),1))
+            if gt(exponent1, exponent2) {
+                coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
+            }
+            if or(lt(exponent1, exponent2), eq(exponent1, exponent2)) {
+                coefficient2 := shl(sub(exponent2, exponent1),coefficient2)
+            }
+            res := div(mul(_number, coefficient1), coefficient2)
+        }
+    }
+
+    function decompileBigNumber(uint256 bigNumber) internal pure returns(uint256 coefficient, uint256 exponent) {
+        assembly {
+            coefficient := shr(exponentMaxSize, bigNumber)
+            exponent := and(bigNumber, sub(shl(exponentMaxSize, 1),1))
+        }
     }
 }
 
@@ -206,6 +280,36 @@ contract ConverterTest {
     function mulDivNormal(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
         uint256 initialGas = gasleft();
         res = _number.mulDivNormal(_bigNumber1, _bigNumber2);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function mulDivNormal2(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
+        uint256 initialGas = gasleft();
+        res = _number.mulDivNormal2(_bigNumber1, _bigNumber2);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function mulDivNormal3(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
+        uint256 initialGas = gasleft();
+        res = _number.mulDivNormal3(_bigNumber1, _bigNumber2);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function mulDivNormal4(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
+        uint256 initialGas = gasleft();
+        res = _number.mulDivNormal4(_bigNumber1, _bigNumber2);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function mulDivNormal5(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
+        uint256 initialGas = gasleft();
+        res = _number.mulDivNormal5(_bigNumber1, _bigNumber2);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function decompileBigNumber(uint256 bigNumber) external view returns(uint256 coefficient, uint256 exponent, uint256 gasUsed) {
+        uint256 initialGas = gasleft();
+        (coefficient, exponent) = bigNumber.decompileBigNumber();
         gasUsed = initialGas - gasleft();
     }
 }
