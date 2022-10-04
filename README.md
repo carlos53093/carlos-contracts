@@ -49,3 +49,6 @@ You can check it in this file
 | using mulDivNormal3 |  313 |
 | using mulDivNormal4 |  280 |
 | using mulDivNormal5 |  214 |
+
+
+**decompileBigNumber** gas fee is **77** for now

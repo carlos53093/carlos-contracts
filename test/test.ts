@@ -48,8 +48,8 @@ describe("Converter", function () {
         const val5 = await Contract.mulDivNormal5("2332387983773948", "570043835946", "772459464469")
         console.log("==============mulDivNormal=============", val5)
 
-        // const test1 = await Contract.decompileBigNumber("570043835946")
-        // console.log(test1)
+        const test1 = await Contract.decompileBigNumber("570043835946")
+        console.log(test1)
 
     });
 });
