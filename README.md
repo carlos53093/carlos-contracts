@@ -54,3 +54,16 @@ You can check it in this file
 
 
 **decompileBigNumber** gas fee is **77** for now
+
+
+ | function name | gas fee |
+| ------ | ------ |
+| N2B |  832 |
+| N2BWithMostSignificantBitUsingAssembly |  617 |
+| N2BWithMostSignificantBitUsingAssemblyTwo |  451 |
+| decompileBigNumber |  38 |
+| mulDivNormal using non-commonMask var |  **215** |
+| mulDivNormal using commonMask var |  **227**(still more expensive) |
+| mulDivNormal (using X var) |  199 |
+
+

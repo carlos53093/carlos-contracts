@@ -239,7 +239,23 @@ library Converter{
         }
     }
 
-    function mulDivNormal6(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+    function mulDivNormal6NonCommonMask(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+        assembly {
+            let coefficient1 := shr(exponentMaxSize, _bigNumber1)
+            let exponent1 := and(_bigNumber1, sub(shl(exponentMaxSize, 1),1))
+            let coefficient2 := shr(exponentMaxSize, _bigNumber2)
+            let exponent2 := and(_bigNumber2, sub(shl(exponentMaxSize, 1),1))
+            if gt(exponent1, exponent2) {
+                coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
+            }
+            if or(lt(exponent1, exponent2), eq(exponent1, exponent2)) {
+                coefficient2 := shl(sub(exponent2, exponent1),coefficient2)
+            }
+            res := div(mul(_number, coefficient1), coefficient2)
+        }
+    }
+
+    function mulDivNormal6UsingCommonMask(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
         assembly {
             let coefficient1 := shr(exponentMaxSize, _bigNumber1)
             let commonMask := sub(shl(exponentMaxSize, 1),1)
@@ -343,7 +359,7 @@ contract ConverterTest {
 
     function mulDivNormal6(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
         uint256 initialGas = gasleft();
-        res = _number.mulDivNormal6(_bigNumber1, _bigNumber2);
+        res = _number.mulDivNormal6UsingCommonMask(_bigNumber1, _bigNumber2);
         gasUsed = initialGas - gasleft();
     }
 
