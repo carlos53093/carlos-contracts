@@ -62,8 +62,9 @@ You can check it in this file
 | N2BWithMostSignificantBitUsingAssembly |  617 |
 | N2BWithMostSignificantBitUsingAssemblyTwo |  451 |
 | decompileBigNumber |  38 |
-| mulDivNormal using non-commonMask var |  **215** |
-| mulDivNormal using commonMask var |  **227**(still more expensive) |
-| mulDivNormal (using X var) |  199 |
+| mulDivNormal using non-commonMask var | 214 |
+| mulDivNormal using commonMask var | 202 |
+| mulDivNormal (using X var) |  187 |
 
 
+ 

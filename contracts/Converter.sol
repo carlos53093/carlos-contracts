@@ -10,6 +10,7 @@ library Converter{
     using Optimizer for uint256;
     uint8 constant coefficientMaxSize = 0x20;
     uint8 constant exponentMaxSize  = 0x08;
+    uint256 internal constant EXPONENTMASK = 0xff;
 
     function mostSignificantBit(uint256 number_) private pure returns (uint8 lastBit_) {
         if (number_ > 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
@@ -242,9 +243,9 @@ library Converter{
     function mulDivNormal6NonCommonMask(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
         assembly {
             let coefficient1 := shr(exponentMaxSize, _bigNumber1)
-            let exponent1 := and(_bigNumber1, sub(shl(exponentMaxSize, 1),1))
+            let exponent1 := and(sub(shl(exponentMaxSize, 1),1), _bigNumber1)
             let coefficient2 := shr(exponentMaxSize, _bigNumber2)
-            let exponent2 := and(_bigNumber2, sub(shl(exponentMaxSize, 1),1))
+            let exponent2 := and(sub(shl(exponentMaxSize, 1),1), _bigNumber2)
             if gt(exponent1, exponent2) {
                 coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
             }
@@ -258,10 +259,10 @@ library Converter{
     function mulDivNormal6UsingCommonMask(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
         assembly {
             let coefficient1 := shr(exponentMaxSize, _bigNumber1)
-            let commonMask := sub(shl(exponentMaxSize, 1),1)
-            let exponent1 := and(_bigNumber1, commonMask)
+            // let commonMask := sub(shl(exponentMaxSize, 1),1)
+            let exponent1 := and(EXPONENTMASK, _bigNumber1)
             let coefficient2 := shr(exponentMaxSize, _bigNumber2)
-            let exponent2 := and(_bigNumber2, commonMask)
+            let exponent2 := and(EXPONENTMASK, _bigNumber2)
             if gt(exponent1, exponent2) {
                 coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
             }
@@ -275,9 +276,9 @@ library Converter{
     function mulDivNormal7(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
         assembly {
             let coefficient1 := shr(exponentMaxSize, _bigNumber1)
-            let exponent1 := and(_bigNumber1, sub(shl(exponentMaxSize, 1),1))
+            let exponent1 := and(_bigNumber1, EXPONENTMASK)
             let coefficient2 := shr(exponentMaxSize, _bigNumber2)
-            let exponent2 := and(_bigNumber2, sub(shl(exponentMaxSize, 1),1))
+            let exponent2 := and(_bigNumber2, EXPONENTMASK)
             let X := gt(exponent1, exponent2)
             if X {
                 coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
