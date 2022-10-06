@@ -33,38 +33,13 @@ You can check it in this file
 
  ## ConverterTest contract
 
- | mode | N2B | B2N |
-| ------ | ------ | ------ |
-| using mostSignificantBit |  832 | 16 |
-| using mostSignificantBitUsingAssembly |  651 | 16 |
-| using mostSignificantBitUsingAssembly logic directly |  617 | 16 |
-| using "lastBit_ := 0x80" instead of "lastBit_ := add(lastBit_, 0x80)" |  617 | 16 |
-| using N2BWithMostSignificantBitUsingAssemblyTwo |  **451** | 16 |
-
 
  | function name | gas fee |
 | ------ | ------ |
-| using mulDivNormal |  1281 |
-| using mulDivNormal2 |  489 |
-| using mulDivNormal3 |  313 |
-| using mulDivNormal4 |  280 |
-| using mulDivNormal5 |  214 |
-| using mulDivNormal6(using commonMask var) |  227 |
-| using mulDivNormal7 |  199 |
-
-
-**decompileBigNumber** gas fee is **77** for now
-
-
- | function name | gas fee |
-| ------ | ------ |
-| N2B |  832 |
-| N2BWithMostSignificantBitUsingAssembly |  617 |
-| N2BWithMostSignificantBitUsingAssemblyTwo |  451 |
+| N2B |  451 |
+| B2N |  16 |
 | decompileBigNumber |  38 |
-| mulDivNormal using non-commonMask var | 214 |
-| mulDivNormal using commonMask var | 202 |
-| mulDivNormal (using X var) |  187 |
+| mulDivNormal |  187 |
 
 
  

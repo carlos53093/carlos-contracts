@@ -10,9 +10,8 @@ import { task } from 'hardhat/config'
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-etherscan'
 import '@nomiclabs/hardhat-waffle'
-import 'hardhat-abi-exporter'
-import 'hardhat-gas-reporter'
-import 'hardhat-contract-sizer'
+// import 'hardhat-abi-exporter'
+// import 'hardhat-gas-reporter'
 import '@tenderly/hardhat-tenderly'
 import '@openzeppelin/hardhat-upgrades'
 import '@typechain/hardhat'
@@ -129,11 +128,11 @@ const config: HardhatUserConfig = {
     outDir: 'build/types',
     target: 'ethers-v5',
   },
-  abiExporter: {
-    path: './build/abis',
-    clear: false,
-    flat: true,
-  },
+  // abiExporter: {
+  //   path: './build/abis',
+  //   clear: false,
+  //   flat: true,
+  // },
   contractSizer: {
     alphaSort: true,
     runOnCompile: false,

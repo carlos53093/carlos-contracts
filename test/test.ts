@@ -14,7 +14,7 @@ let Factory2
 
 describe("Converter", function () {
     beforeEach(async function () {
-        Factory = await ethers.getContractFactory('ConverterTest')
+        Factory = await ethers.getContractFactory('TConverter')
         Contract = await Factory.deploy()
         // Factory2 = await ethers.getContractFactory('OptimizerTest')
         // Contract2 = await Factory2.deploy()
@@ -49,14 +49,23 @@ describe("Converter", function () {
         // const val5 = await Contract.mulDivNormal5("2332387983773948", "570043835946", "772459464469")
         // console.log("==============mulDivNormal=============", val5)
 
-        const val6 = await Contract.mulDivNormal6("2332387983773948", "570043835946", "772459464469")
-        console.log("==============mulDivNormal=============", val6)
+        // const val6 = await Contract.mulDivNormal6("2332387983773948", "570043835946", "772459464469")
+        // console.log("==============mulDivNormal=============", val6)
 
-        const val7 = await Contract.mulDivNormal7("2332387983773948", "570043835946", "772459464469")
-        console.log("==============mulDivNormal=============", val7)
+        // const val7 = await Contract.mulDivNormal7("2332387983773948", "570043835946", "772459464469")
+        // console.log("==============mulDivNormal=============", val7)
 
-        // const test1 = await Contract.decompileBigNumber("570043835946")
-        // console.log(test1)
+        const tt1 = await Contract.NumberToBigNumAsm2("24448551293836797297757950")
+        // const tt2 = await Contract.NumberToBigNumAsm2("3948179283")
+
+        console.log(tt1)
+        // console.log(tt2)
+
+        // const aaa = await Contract.NumberToBigNumAsm2("4")
+        // console.log(aaa)
+
+        const test1 = await Contract.mulDivBignumber("572283163178", "9817912874298", "3948179283")
+        console.log(test1)
 
     });
 });

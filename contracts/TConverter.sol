@@ -5,6 +5,7 @@
 pragma solidity ^0.8.12;
 
 import "./libs/FOptimizer.sol";
+import "hardhat/console.sol";
 
 library Converter{
     using Optimizer for uint256;
@@ -293,12 +294,36 @@ library Converter{
     function decompileBigNumber(uint256 bigNumber) internal pure returns(uint256 coefficient, uint256 exponent) {
         assembly {
             coefficient := shr(exponentMaxSize, bigNumber)
-            exponent := and(bigNumber, sub(shl(exponentMaxSize, 1),1))
+            exponent := and(bigNumber, EXPONENTMASK)
         }
+    }
+
+    function mulDivBignumber (uint256 bigNumber, uint256 number1, uint256 number2) internal pure returns(uint256 result) {
+        (uint256 coefficient1, uint256 exponent1) = decompileBigNumber(bigNumber);
+        (uint coefficient2, uint256 exponent2,) = N2BWithMostSignificantBitUsingAssemblyTwo(number1);
+        (uint coefficient3, uint256 exponent3,) = N2BWithMostSignificantBitUsingAssemblyTwo(number2);
+        uint256 resultCoefficient = coefficient1 * coefficient2;
+        uint256 resultExponent = exponent1 + exponent2;
+ 
+        if(resultCoefficient < coefficient3) {
+            if(resultExponent < 32) return 0;
+            resultExponent -= 32;
+            resultCoefficient = resultCoefficient << 32;
+        }
+         if(resultExponent < exponent3) return 0;
+        resultCoefficient  = resultCoefficient / coefficient3;
+        resultExponent -= exponent3;
+        uint len2 = mostSignificantBit(resultCoefficient);
+        if(len2 > 32) {
+            resultCoefficient = resultCoefficient >> (len2 - 32);
+            resultExponent += (len2 - 32);
+        }
+
+        return (resultCoefficient<<8) + resultExponent;
     }
 }
 
-contract ConverterTest {
+contract TConverter {
     using Converter for uint256;
     
     function NumberToBigNum(uint256 nomal) external view returns (uint256, uint, uint, uint) {
@@ -374,5 +399,9 @@ contract ConverterTest {
         uint256 initialGas = gasleft();
         (coefficient, exponent) = bigNumber.decompileBigNumber();
         gasUsed = initialGas - gasleft();
+    }
+
+    function mulDivBignumber (uint256 bigNumber, uint256 number1, uint256 number2) external pure returns (uint res) {
+        res = bigNumber.mulDivBignumber(number1, number2);
     }
 }

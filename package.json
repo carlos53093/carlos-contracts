@@ -62,7 +62,6 @@
     "hardhat": "^2.6.1",
     "hardhat-abi-exporter": "^2.2.0",
     "hardhat-contract-sizer": "^2.6.1",
-    "hardhat-gas-reporter": "^1.0.4",
     "prettier": "^2.1.1",
     "prettier-plugin-solidity": "^1.0.0-alpha.56",
     "solidity-coverage": "^0.7.10",
