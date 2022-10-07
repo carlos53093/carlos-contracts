@@ -23,24 +23,3 @@ library Optimizer{
         return store;
     }
 }
-
-contract FOptimizerTest {
-    
-    uint256 public _store;
-
-    function store(uint256 value, uint8 offset, uint8 size) external view returns(uint256) {
-        uint256 store_ = _store;
-        uint256 initialGas = gasleft();
-        store_ = Optimizer.storeNumber(store_, value, offset, size);
-        uint256 gasUsed = initialGas - gasleft();
-        return gasUsed;
-    }
-
-    function restore(uint8 offset, uint8 size) external view returns(uint256) {
-        uint256 store_ = _store;
-        uint256 initialGas = gasleft();
-        store_ =  Optimizer.restoreNumber(store_, offset, size);
-        uint256 gasUsed = initialGas - gasleft();
-        return gasUsed;
-    }
-}

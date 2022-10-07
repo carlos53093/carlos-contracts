@@ -4,7 +4,7 @@
 // This is the most efficient for gas reduction
 pragma solidity ^0.8.12;
 
-import "./FOptimizer.sol";
+import "./Optimizer.sol";
 
 library Converter{
     using Optimizer for uint256;
@@ -89,33 +89,44 @@ library Converter{
             exponent := and(bigNumber, EXPONENTMASK)
         }
     }
-}
 
-contract ConverterTest {
-    using Converter for uint256;
-    
-    function NumberToBigNum(uint256 nomal) external view returns (uint256, uint, uint, uint) {
-        uint256 initialGas = gasleft();
-        (uint256 coefficient, uint256 exponent, uint256 bigNumber ) = nomal.N2B();
-        uint256 gasUsed = initialGas - gasleft();
-        return (gasUsed, coefficient, exponent, bigNumber);
-    }
-
-    function BigNumToNum(uint256 coefficient, uint256 exponent) external view returns(uint256, uint) {
-        uint256 initialGas = gasleft();
-        uint num = Converter.B2N(coefficient, exponent);
-        return (initialGas - gasleft(), num);
-    }
-
-    function mulDivNormal(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2) external view returns(uint256 res, uint gasUsed) {
-        uint256 initialGas = gasleft();
-        res = _number.mulDivNormal(_bigNumber1, _bigNumber2);
-        gasUsed = initialGas - gasleft();
-    }
-
-    function decompileBigNumber(uint256 bigNumber) external view returns(uint256 coefficient, uint256 exponent, uint256 gasUsed) {
-        uint256 initialGas = gasleft();
-        (coefficient, exponent) = bigNumber.decompileBigNumber();
-        gasUsed = initialGas - gasleft();
+    function mostSignificantBit(uint256 normal) private pure returns (uint8 lastBit_) {
+        assembly{
+            let number_ := normal
+            if gt(normal, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
+                number_ := shr(0x80, number_)
+                lastBit_ := 0x80
+            }
+            if gt(number_, 0xFFFFFFFFFFFFFFFF) {
+                number_ := shr(0x40, number_)
+                lastBit_ := add(lastBit_, 0x40)
+            }
+            if gt(number_, 0xFFFFFFFF) {
+                number_ := shr(0x20, number_)
+                lastBit_ := add(lastBit_, 0x20)
+            }
+            if gt(number_, 0xFFFF) {
+                number_ := shr(0x10, number_)
+                lastBit_ := add(lastBit_, 0x10)
+            }
+            if gt(number_, 0xFF) {
+                number_ := shr(0x8, number_)
+                lastBit_ := add(lastBit_, 0x8)
+            }
+            if gt(number_, 0xF) {
+                number_ := shr(0x4, number_)
+                lastBit_ := add(lastBit_, 0x4)
+            }
+            if gt(number_, 0x3) {
+                number_ := shr(0x2, number_)
+                lastBit_ := add(lastBit_, 0x2)
+            }
+            if gt(number_, 0x1) {
+                lastBit_ := add(lastBit_, 1)
+            }
+            if gt(number_, 0) {
+                lastBit_ := add(lastBit_, 1)
+            }
+        }
     }
 }

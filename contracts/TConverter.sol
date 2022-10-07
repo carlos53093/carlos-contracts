@@ -4,7 +4,7 @@
 // This is the most efficient for gas reduction
 pragma solidity ^0.8.12;
 
-import "./libs/FOptimizer.sol";
+import "./libs/Optimizer.sol";
 import "hardhat/console.sol";
 
 library Converter{
@@ -13,37 +13,44 @@ library Converter{
     uint8 constant exponentMaxSize  = 0x08;
     uint256 internal constant EXPONENTMASK = 0xff;
 
-    function mostSignificantBit(uint256 number_) private pure returns (uint8 lastBit_) {
-        if (number_ > 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
-            number_ >>= 128;
-            lastBit_ += 128;
+    function mostSignificantBit(uint256 normal) private pure returns (uint8 lastBit_) {
+        assembly{
+            let number_ := normal
+            if gt(normal, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
+                number_ := shr(0x80, number_)
+                lastBit_ := 0x80
+            }
+            if gt(number_, 0xFFFFFFFFFFFFFFFF) {
+                number_ := shr(0x40, number_)
+                lastBit_ := add(lastBit_, 0x40)
+            }
+            if gt(number_, 0xFFFFFFFF) {
+                number_ := shr(0x20, number_)
+                lastBit_ := add(lastBit_, 0x20)
+            }
+            if gt(number_, 0xFFFF) {
+                number_ := shr(0x10, number_)
+                lastBit_ := add(lastBit_, 0x10)
+            }
+            if gt(number_, 0xFF) {
+                number_ := shr(0x8, number_)
+                lastBit_ := add(lastBit_, 0x8)
+            }
+            if gt(number_, 0xF) {
+                number_ := shr(0x4, number_)
+                lastBit_ := add(lastBit_, 0x4)
+            }
+            if gt(number_, 0x3) {
+                number_ := shr(0x2, number_)
+                lastBit_ := add(lastBit_, 0x2)
+            }
+            if gt(number_, 0x1) {
+                lastBit_ := add(lastBit_, 1)
+            }
+            if gt(number_, 0) {
+                lastBit_ := add(lastBit_, 1)
+            }
         }
-        if (number_ > 0xFFFFFFFFFFFFFFFF) {
-            number_ >>= 64;
-            lastBit_ += 64;
-        }
-        if (number_ > 0xFFFFFFFF) {
-            number_ >>= 32;
-            lastBit_ += 32;
-        }
-        if (number_ > 0xFFFF) {
-            number_ >>= 16;
-            lastBit_ += 16;
-        }
-        if (number_ > 0xFF) {
-            number_ >>= 8;
-            lastBit_ += 8;
-        }
-        if (number_ > 0xF) {
-            number_ >>= 4;
-            lastBit_ += 4;
-        }
-        if (number_ > 0x3) {
-            number_ >>= 2;
-            lastBit_ += 2;
-        }
-        if (number_ > 0x1) ++lastBit_;
-        if (number_ > 0x0) ++lastBit_;
     }
 
     function N2B(uint256 normal) internal pure returns(uint256 coefficient, uint256 exponent, uint256 bigNumber) {
@@ -302,10 +309,11 @@ library Converter{
         (uint256 coefficient1, uint256 exponent1) = decompileBigNumber(bigNumber);
         (uint coefficient2, uint256 exponent2,) = N2BWithMostSignificantBitUsingAssemblyTwo(number1);
         (uint coefficient3, uint256 exponent3,) = N2BWithMostSignificantBitUsingAssemblyTwo(number2);
+
         uint256 resultCoefficient = coefficient1 * coefficient2;
         uint256 resultExponent = exponent1 + exponent2;
- 
         if(resultCoefficient < coefficient3) {
+ 
             if(resultExponent < 32) return 0;
             resultExponent -= 32;
             resultCoefficient = resultCoefficient << 32;
@@ -318,7 +326,6 @@ library Converter{
             resultCoefficient = resultCoefficient >> (len2 - 32);
             resultExponent += (len2 - 32);
         }
-
         return (resultCoefficient<<8) + resultExponent;
     }
 }
@@ -401,7 +408,9 @@ contract TConverter {
         gasUsed = initialGas - gasleft();
     }
 
-    function mulDivBignumber (uint256 bigNumber, uint256 number1, uint256 number2) external pure returns (uint res) {
+    function mulDivBignumber (uint256 bigNumber, uint256 number1, uint256 number2) external view returns (uint res, uint256 gasUsed) {
+        uint256 initialGas = gasleft();
         res = bigNumber.mulDivBignumber(number1, number2);
+        gasUsed = initialGas - gasleft();
     }
 }
