@@ -391,11 +391,33 @@ library Converter{
                 }
                 if iszero(cond2) {
                     exponent1 := sub(exponent1, diffMsb)
-                    let tmp := div(resultNumerator, shr(diffMsb, number2))
+                    resultNumerator := div(resultNumerator, shr(diffMsb, number2))
                     resultCoefficient, resultExponent := N2BWithMostSignificantBitUsingAssembly(resultNumerator)
                 }
             }
             result := add(shl(exponentMaxSize, resultCoefficient), add(resultExponent, exponent1))
+        }
+    }
+
+    function mulDivBignumberAsm2 (uint256 bigNumber, uint256 number1, uint256 number2) internal pure returns(uint256 result) {
+        unchecked{
+            uint256 resultNumerator;
+            uint256 exponent1;
+            assembly{
+                exponent1 := and(bigNumber, EXPONENTMASK)
+                resultNumerator := mul(shr(exponentMaxSize, bigNumber), number1)
+            }
+
+            if (resultNumerator < number2) {
+                uint256 diffMsb = mostSignificantBit(number2 / resultNumerator);
+                if (diffMsb > exponent1) return 0;
+                assembly{
+                    exponent1 := sub(exponent1, diffMsb)
+                    number2 := shr(diffMsb, number2)
+                }
+            }
+            (, , result) = N2BWithMostSignificantBitUsingAssemblyTwo(resultNumerator / number2);
+            result = result + exponent1;
         }
     }
 }
@@ -487,6 +509,12 @@ contract TConverter {
     function mulDivBignumberAsm (uint256 bigNumber, uint256 number1, uint256 number2) external view returns (uint res, uint256 gasUsed) {
         uint256 initialGas = gasleft();
         res = bigNumber.mulDivBignumberAsm(number1, number2);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function mulDivBignumberAsm2 (uint256 bigNumber, uint256 number1, uint256 number2) external view returns (uint res, uint256 gasUsed) {
+        uint256 initialGas = gasleft();
+        res = bigNumber.mulDivBignumberAsm2(number1, number2);
         gasUsed = initialGas - gasleft();
     }
 }

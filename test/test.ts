@@ -70,5 +70,8 @@ describe("Converter", function () {
         const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
         console.log(test2)
 
+        const test3 = await Contract.mulDivBignumberAsm2("572283163178", "9817912874298", "3948179283")
+        console.log(test3)
+
     });
 });

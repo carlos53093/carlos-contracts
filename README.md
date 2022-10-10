@@ -42,6 +42,7 @@ You can check it in this file
 | mulDivNormal |  187 |
 | mulDivBignumber |  974 |
 | mulDivBignumberAsm |  659 |
+| mulDivBignumberAsm2 |  613 |
 
 
  
