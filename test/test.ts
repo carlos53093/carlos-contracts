@@ -55,10 +55,10 @@ describe("Converter", function () {
         // const val7 = await Contract.mulDivNormal7("2332387983773948", "570043835946", "772459464469")
         // console.log("==============mulDivNormal=============", val7)
 
-        const tt1 = await Contract.NumberToBigNumAsm2("24448551293836797297757950")
-        // const tt2 = await Contract.NumberToBigNumAsm2("3948179283")
+        // const tt1 = await Contract.NumberToBigNumAsm2("24448551293836797297757950")
+        // // const tt2 = await Contract.NumberToBigNumAsm2("3948179283")
 
-        console.log(tt1)
+        // console.log(tt1)
         // console.log(tt2)
 
         // const aaa = await Contract.NumberToBigNumAsm2("4")
@@ -66,6 +66,9 @@ describe("Converter", function () {
 
         const test1 = await Contract.mulDivBignumber("572283163178", "9817912874298", "3948179283")
         console.log(test1)
+
+        const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
+        console.log(test2)
 
     });
 });

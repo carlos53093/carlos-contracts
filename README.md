@@ -40,6 +40,8 @@ You can check it in this file
 | B2N |  16 |
 | decompileBigNumber |  38 |
 | mulDivNormal |  187 |
+| mulDivBignumber |  974 |
+| mulDivBignumberAsm |  659 |
 
 
  

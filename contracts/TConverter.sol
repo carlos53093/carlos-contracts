@@ -307,26 +307,96 @@ library Converter{
 
     function mulDivBignumber (uint256 bigNumber, uint256 number1, uint256 number2) internal pure returns(uint256 result) {
         (uint256 coefficient1, uint256 exponent1) = decompileBigNumber(bigNumber);
-        (uint coefficient2, uint256 exponent2,) = N2BWithMostSignificantBitUsingAssemblyTwo(number1);
-        (uint coefficient3, uint256 exponent3,) = N2BWithMostSignificantBitUsingAssemblyTwo(number2);
+        uint256 resultNumerator =  coefficient1 * number1;
+        uint256 resultCoefficient;
+        uint256 resultExponent;
+        if(resultNumerator >= number2) {
+            resultNumerator = resultNumerator / number2;
+            (resultCoefficient, resultExponent,) = N2BWithMostSignificantBitUsingAssemblyTwo(resultNumerator);
+        } else {
+            uint256 diff = number2 / resultNumerator;
+            uint256 diffMsb = mostSignificantBit(diff);
+            if(diffMsb > exponent1) return 0;
+            else {
+                exponent1 -= diffMsb;
+                uint256 tmp = resultNumerator / (number2 >> diffMsb);
+                (resultCoefficient, resultExponent,) = N2BWithMostSignificantBitUsingAssemblyTwo(tmp);
+            }
+        }
+        return (resultCoefficient << 8) + (resultExponent + exponent1);
+    }
 
-        uint256 resultCoefficient = coefficient1 * coefficient2;
-        uint256 resultExponent = exponent1 + exponent2;
-        if(resultCoefficient < coefficient3) {
- 
-            if(resultExponent < 32) return 0;
-            resultExponent -= 32;
-            resultCoefficient = resultCoefficient << 32;
+    function mulDivBignumberAsm (uint256 bigNumber, uint256 number1, uint256 number2) internal pure returns(uint256 result) {
+        assembly{
+            function mostSignificantBit(normal) -> lastBit_ {
+                let number_ := normal
+                if gt(normal, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
+                    number_ := shr(0x80, number_)
+                    lastBit_ := 0x80
+                }
+                if gt(number_, 0xFFFFFFFFFFFFFFFF) {
+                    number_ := shr(0x40, number_)
+                    lastBit_ := add(lastBit_, 0x40)
+                }
+                if gt(number_, 0xFFFFFFFF) {
+                    number_ := shr(0x20, number_)
+                    lastBit_ := add(lastBit_, 0x20)
+                }
+                if gt(number_, 0xFFFF) {
+                    number_ := shr(0x10, number_)
+                    lastBit_ := add(lastBit_, 0x10)
+                }
+                if gt(number_, 0xFF) {
+                    number_ := shr(0x8, number_)
+                    lastBit_ := add(lastBit_, 0x8)
+                }
+                if gt(number_, 0xF) {
+                    number_ := shr(0x4, number_)
+                    lastBit_ := add(lastBit_, 0x4)
+                }
+                if gt(number_, 0x3) {
+                    number_ := shr(0x2, number_)
+                    lastBit_ := add(lastBit_, 0x2)
+                }
+                if gt(number_, 0x1) {
+                    lastBit_ := add(lastBit_, 1)
+                }
+                if gt(number_, 0) {
+                    lastBit_ := add(lastBit_, 1)
+                }
+            }
+            function N2BWithMostSignificantBitUsingAssembly(normal) -> coefficient, exponent {
+                let lastBit_ := mostSignificantBit(normal)
+                if lt(lastBit_, coefficientMaxSize) {  // for throw exception
+                    lastBit_ := coefficientMaxSize
+                }
+                exponent := sub(lastBit_, coefficientMaxSize)
+                coefficient := shr(exponent, normal)
+            }
+            let coefficient1 := shr(exponentMaxSize, bigNumber)
+            let exponent1 := and(bigNumber, EXPONENTMASK)
+            let resultNumerator := mul(coefficient1, number1)
+            let resultCoefficient let resultExponent
+            let cond := lt(resultNumerator, number2)
+            if iszero(cond) {
+                resultNumerator := div(resultNumerator, number2)
+                resultCoefficient, resultExponent := N2BWithMostSignificantBitUsingAssembly(resultNumerator) 
+            }
+            if cond {
+                let diff := div(number2, resultNumerator)
+                let diffMsb := mostSignificantBit(diff)
+                let cond2 := gt(diffMsb, exponent1)
+                if cond2 {
+                    result := 0
+                }
+                if iszero(cond2) {
+                    exponent1 := sub(exponent1, diffMsb)
+                    let tmp := div(resultNumerator, shr(diffMsb, number2))
+                    resultCoefficient, resultExponent := N2BWithMostSignificantBitUsingAssembly(resultNumerator)
+                }
+            }
+            result := add(shl(exponentMaxSize, resultCoefficient), add(resultExponent, exponent1))
         }
-         if(resultExponent < exponent3) return 0;
-        resultCoefficient  = resultCoefficient / coefficient3;
-        resultExponent -= exponent3;
-        uint len2 = mostSignificantBit(resultCoefficient);
-        if(len2 > 32) {
-            resultCoefficient = resultCoefficient >> (len2 - 32);
-            resultExponent += (len2 - 32);
-        }
-        return (resultCoefficient<<8) + resultExponent;
     }
 }
 
@@ -411,6 +481,12 @@ contract TConverter {
     function mulDivBignumber (uint256 bigNumber, uint256 number1, uint256 number2) external view returns (uint res, uint256 gasUsed) {
         uint256 initialGas = gasleft();
         res = bigNumber.mulDivBignumber(number1, number2);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function mulDivBignumberAsm (uint256 bigNumber, uint256 number1, uint256 number2) external view returns (uint res, uint256 gasUsed) {
+        uint256 initialGas = gasleft();
+        res = bigNumber.mulDivBignumberAsm(number1, number2);
         gasUsed = initialGas - gasleft();
     }
 }
