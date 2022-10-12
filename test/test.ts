@@ -14,7 +14,7 @@ let Factory2
 
 describe("Converter", function () {
     beforeEach(async function () {
-        Factory = await ethers.getContractFactory('TConverter')
+        Factory = await ethers.getContractFactory('TickMathTest')
         Contract = await Factory.deploy()
         // Factory2 = await ethers.getContractFactory('OptimizerTest')
         // Contract2 = await Factory2.deploy()
@@ -64,14 +64,15 @@ describe("Converter", function () {
         // const aaa = await Contract.NumberToBigNumAsm2("4")
         // console.log(aaa)
 
-        const test1 = await Contract.mulDivBignumber("572283163178", "9817912874298", "3948179283")
-        console.log(test1)
+        // const test1 = await Contract.mulDivBignumber("572283163178", "9817912874298", "3948179283")
+        // console.log(test1)
 
-        const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
-        console.log(test2)
+        // const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
+        // console.log(test2)
 
-        const test3 = await Contract.mulDivBignumberAsm2("572283163178", "9817912874298", "3948179283")
+        const test3 = await Contract.getRatioAtTick("0")
         console.log(test3)
-
+        const test4 = await Contract.getRatioAtTickAsm("0")
+        console.log(test4)
     });
 });

@@ -44,5 +44,15 @@ You can check it in this file
 | mulDivBignumberAsm |  659 |
 | mulDivBignumberAsm2 |  613 |
 
-
+ <br/>
  
+ ## TickMathLib Library
+
+| function name | Param | gas fee |
+| ------ | ------ | ------ |
+| getRatioAtTick | 443635(max op) | 3214 |
+| getRatioAtTickAsm | 443635(max op) | 1020 |
+| getRatioAtTick | -443635 | 3266 |
+| getRatioAtTickAsm | -443635 | 1015 |
+| getRatioAtTick | 1 | 891 |
+| getRatioAtTickAsm | 1 | 788 |
