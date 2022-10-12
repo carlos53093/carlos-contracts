@@ -10,25 +10,25 @@ library TickMath {
     
     uint256 internal constant FACTOR00 = 1000000000000000000;
     uint256 internal constant FACTOR01 = 1000100000000000000;
-    uint256 internal constant FACTOR02 = 100020001;
-    uint256 internal constant FACTOR03 = 1000400060004;
-    uint256 internal constant FACTOR04 = 1000800280056007;
-    uint256 internal constant FACTOR05 = 100160120056;
-    uint256 internal constant FACTOR06 = 100320496496;
-    uint256 internal constant FACTOR07 = 100642020173;
-    uint256 internal constant FACTOR08 = 101288162245;
-    uint256 internal constant FACTOR09 = 101288162245;
-    uint256 internal constant FACTOR10 = 102592918109;
-    uint256 internal constant FACTOR11 = 105253068461;
-    uint256 internal constant FACTOR12 = 110782084204;
-    uint256 internal constant FACTOR13 = 122726701806;
-    uint256 internal constant FACTOR14 = 150618433361;
-    uint256 internal constant FACTOR15 = 226859124682;
-    uint256 internal constant FACTOR16 = 514650624516;
-    uint256 internal constant FACTOR17 = 264865265314;
-    uint256 internal constant FACTOR18 = 701536087701;
-    uint256 internal constant FACTOR19 = 492152882347;
-    uint256 internal constant FACTOR20 = 242214459602;
+    // uint256 internal constant FACTOR02 = 100020001;
+    // uint256 internal constant FACTOR03 = 1000400060004;
+    // uint256 internal constant FACTOR04 = 1000800280056007;
+    // uint256 internal constant FACTOR05 = 100160120056;
+    // uint256 internal constant FACTOR06 = 100320496496;
+    // uint256 internal constant FACTOR07 = 100642020173;
+    // uint256 internal constant FACTOR08 = 101288162245;
+    // uint256 internal constant FACTOR09 = 101288162245;
+    // uint256 internal constant FACTOR10 = 102592918109;
+    // uint256 internal constant FACTOR11 = 105253068461;
+    // uint256 internal constant FACTOR12 = 110782084204;
+    // uint256 internal constant FACTOR13 = 122726701806;
+    // uint256 internal constant FACTOR14 = 150618433361;
+    // uint256 internal constant FACTOR15 = 226859124682;
+    // uint256 internal constant FACTOR16 = 514650624516;
+    // uint256 internal constant FACTOR17 = 264865265314;
+    // uint256 internal constant FACTOR18 = 701536087701;
+    // uint256 internal constant FACTOR19 = 492152882347;
+    // uint256 internal constant FACTOR20 = 242214459602;
 
     // The minimum value that can be returned from #getRatioAtTick. Equivalent to getRatioAtTick(MIN_TICK)
     uint160 internal constant MIN_RATIOX96 = 4295128738;
