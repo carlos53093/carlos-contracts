@@ -51,8 +51,8 @@ You can check it in this file
 | function name | Param | gas fee |
 | ------ | ------ | ------ |
 | getRatioAtTick | 443635(max op) | 3214 |
-| getRatioAtTickAsm | 443635(max op) | 1020 |
+| getRatioAtTickAsm | 443635(max op) | 994 |
 | getRatioAtTick | -443635 | 3266 |
-| getRatioAtTickAsm | -443635 | 1015 |
+| getRatioAtTickAsm | -443635 | 997 |
 | getRatioAtTick | 1 | 891 |
 | getRatioAtTickAsm | 1 | 788 |

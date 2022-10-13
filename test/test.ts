@@ -70,9 +70,11 @@ describe("Converter", function () {
         // const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
         // console.log(test2)
 
-        const test3 = await Contract.getRatioAtTick("0")
+        const test3 = await Contract.getRatioAtTick("-443635")
         console.log(test3)
-        const test4 = await Contract.getRatioAtTickAsm("0")
+        const test33 = await Contract.getRatioAtTick2("-443635")
+        console.log(test33)
+        const test4 = await Contract.getRatioAtTickAsm("-443635")
         console.log(test4)
     });
 });
