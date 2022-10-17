@@ -100,5 +100,20 @@ describe("Converter", function () {
         console.log(test3)
         test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
+
+        test3 = await Contract.getRatioAtTick("223")
+        console.log(test3)
+        test4 = await Contract.getTickAtRatio(test3.res.toString())
+        console.log(test4)
+
+        test3 = await Contract.getRatioAtTick("-223")
+        console.log(test3)
+        test4 = await Contract.getTickAtRatio(test3.res.toString())
+        console.log(test4)
+
+        test3 = await Contract.getRatioAtTick("-5")
+        console.log(test3)
+        test4 = await Contract.getTickAtRatio(test3.res.toString())
+        console.log(test4)
     });
 });

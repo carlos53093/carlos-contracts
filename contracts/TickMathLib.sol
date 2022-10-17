@@ -15,26 +15,26 @@ library TickMath {
     int24 internal constant MAX_TICK = 443636;
 
     uint256 internal constant FACTOR00 = 0x100000000000000000000000000000000;
-    uint256 internal constant FACTOR01 = 0xfff97272373d413259a46990580e213a;
-    uint256 internal constant FACTOR02 = 0xfff2e50f5f656932ef12357cf3c7fdcc;        // 1.0001 ** 2
-    uint256 internal constant FACTOR03 = 0xffe5caca7e10e4e61c3624eaa0941cd0;        // 1.0001 ** 4
-    uint256 internal constant FACTOR04 = 0xffcb9843d60f6159c9db58835c926644;        // 1.0001 ** 8
+    uint256 internal constant FACTOR01 = 0xfff97272373d413259a46990580e2139;
+    uint256 internal constant FACTOR02 = 0xfff2e50f5f656932ef12357cf3c7fdcb;        // 1.0001 ** 2
+    uint256 internal constant FACTOR03 = 0xffe5caca7e10e4e61c3624eaa0941ccf;        // 1.0001 ** 4
+    uint256 internal constant FACTOR04 = 0xffcb9843d60f6159c9db58835c926643;        // 1.0001 ** 8
 
     // TODO: calculate factors: Formula:= factor => (uint256.max / ((1.0001 ** tick) << 128))
-    uint256 internal constant FACTOR05 = 0xff973b41fa98c081472e6896dfb254c0;      // 1.0001 ** 16
+    uint256 internal constant FACTOR05 = 0xff973b41fa98c081472e6896dfb254bf;      // 1.0001 ** 16
     uint256 internal constant FACTOR06 = 0xff2ea16466c96a3843ec78b326b52861;      // 1.0001 ** 32
     uint256 internal constant FACTOR07 = 0xfe5dee046a99a2a811c461f1969c3053;      // 1.0001 ** 64
     uint256 internal constant FACTOR08 = 0xfcbe86c7900a88aedcffc83b479aa3a4;      // 1.0001 ** 128
     uint256 internal constant FACTOR09 = 0xf987a7253ac413176f2b074cf7815e54;      // 1.0001 ** 256
-    uint256 internal constant FACTOR10 = 0xf3392b0822b70005940c7a398e4b70f3;      // 1.0001 ** 512
-    uint256 internal constant FACTOR11 = 0xe7159475a2c29b7443b29c7fa6e889d9;      // 1.0001 ** 1024
+    uint256 internal constant FACTOR10 = 0xf3392b0822b70005940c7a398e4b70f2;      // 1.0001 ** 512
+    uint256 internal constant FACTOR11 = 0xe7159475a2c29b7443b29c7fa6e889d8;      // 1.0001 ** 1024
     uint256 internal constant FACTOR12 = 0xd097f3bdfd2022b8845ad8f792aa5825;      // 1.0001 ** 2048
-    uint256 internal constant FACTOR13 = 0xa9f746462d870fdf8a65dc1f90e061e5;      // 1.0001 ** 4096
-    uint256 internal constant FACTOR14 = 0x70d869a156d2a1b890bb3df62baf32f7;      // 1.0001 ** 8192
-    uint256 internal constant FACTOR15 = 0x31be135f97d08fd981231505542fcfa6;      // 1.0001 ** 16384
-    uint256 internal constant FACTOR16 = 0x09aa508b5b7a84e1c677de54f3e99bc9;      // 1.0001 ** 32768
+    uint256 internal constant FACTOR13 = 0xa9f746462d870fdf8a65dc1f90e061e4;      // 1.0001 ** 4096
+    uint256 internal constant FACTOR14 = 0x70d869a156d2a1b890bb3df62baf32f6;      // 1.0001 ** 8192
+    uint256 internal constant FACTOR15 = 0x31be135f97d08fd981231505542fcfa5;      // 1.0001 ** 16384
+    uint256 internal constant FACTOR16 = 0x09aa508b5b7a84e1c677de54f3e99bc8;      // 1.0001 ** 32768
     uint256 internal constant FACTOR17 = 0x5d6af8dedb81196699c329225ee604;     // 1.0001 ** 65536
-    uint256 internal constant FACTOR18 = 0x2216e584f5fa1ea926041bedfe98;   // 1.0001 ** 131072
+    uint256 internal constant FACTOR18 = 0x2216e584f5fa1ea926041bedfe97;   // 1.0001 ** 131072
     uint256 internal constant FACTOR19 = 0x048a170391f7dc42444e8fa2;   // 1.0001 ** 262144
 
     // The minimum value that can be returned from #getRatioAtTick. Equivalent to getRatioAtTick(MIN_TICK)
