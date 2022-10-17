@@ -71,32 +71,32 @@ describe("Converter", function () {
         let test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
 
-        test3 = await Contract.getRatioAtTick("234")
+        test3 = await Contract.getRatioAtTick("1")
         console.log(test3)
         test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
 
-        test3 = await Contract.getRatioAtTick("999")
+        test3 = await Contract.getRatioAtTick("2")
         console.log(test3)
         test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
 
-        test3 = await Contract.getRatioAtTick("-987")
+        test3 = await Contract.getRatioAtTick("4")
         console.log(test3)
         test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
 
-        test3 = await Contract.getRatioAtTick("-1")
+        test3 = await Contract.getRatioAtTick("8")
         console.log(test3)
         test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
 
-        test3 = await Contract.getRatioAtTick("443635")
+        test3 = await Contract.getRatioAtTick("16")
         console.log(test3)
         test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
 
-        test3 = await Contract.getRatioAtTick("-443635")
+        test3 = await Contract.getRatioAtTick("32")
         console.log(test3)
         test4 = await Contract.getTickAtRatio(test3.res.toString())
         console.log(test4)
