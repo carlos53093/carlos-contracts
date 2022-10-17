@@ -45,8 +45,14 @@ library TickMath {
 
     uint256 internal constant zeroTickScaledRatio = 0x1000000000000000000000000; // 1 << 96
 
-    function getRatioAtTickUpdated(int24 tick_)
-        public
+    /**
+     * @notice ratioX96 = (1.0001^tick) * 2^96
+     * @dev Throws if |tick| > max tick
+     * @param tick_ The input tick for the above formula
+     * @return ratioX96_ ratio = (debt amount/collateral amount)
+     */
+    function getRatioAtTick(int24 tick_)
+        internal
         pure
         returns (uint256 ratioX96_)
     {
@@ -89,15 +95,17 @@ library TickMath {
 
         ratioX96_ = (factor_ >> 32) + precision_;
     }
-    
+
        /**
      * @notice ratioX96 = (1.0001^tick) * 2^96
      * @dev Throws if ratioX96_ > max ratio || ratioX96 < min ratio
      * @param ratioX96_ The input ratio; ratio = (debt amount/collateral amount)
      * @return tick_ The output tick for the above formula
      */
-    function getTickAtRatioUpdated(uint256 ratioX96_)
-        public
+    
+
+    function getTickAtRatio(uint256 ratioX96_)
+        internal
         pure
         returns (int24 tick_, uint256 factor_)
     {
@@ -192,18 +200,21 @@ library TickMath {
             tick_ = -tick_;
         }
     }
+}
 
 contract TickMathTest {
     
+    uint256 public _store;
+
     function getRatioAtTick(int24 tick_) external view returns(uint256 res, uint256 gasUsed) {
         uint256 initialGas = gasleft();
-        res = TickMath.getRatioAtTickUpdated(tick_);
+        res = TickMath.getRatioAtTick(tick_);
         gasUsed = initialGas - gasleft();
     }
 
-    function getTickAtRatio(uint256 ratio) external view returns(int24 res, uint256 gasUsed) {
+    function getTickAtRatio(uint256 ratio) external view returns(int24 tick, uint256 factor, uint256 gasUsed) {
         uint256 initialGas = gasleft();
-        res = TickMath.getTickAtRatioUpdated(ratio);
+        (tick, factor) = TickMath.getTickAtRatio(ratio);
         gasUsed = initialGas - gasleft();
     }
 }

@@ -1,4 +1,3 @@
-// contracts/NFT.sol
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 // This is the most efficient for gas reduction
