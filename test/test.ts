@@ -22,59 +22,14 @@ describe("Converter", function () {
 
     it("testing...", async function () {
 
-        // We get an instance of the contract
-        const [ owner ] = await ethers.getSigners();
-        let tx;
-        // let tx = await Contract.connect(owner).NumberToBigNum("8587934592");
-        // console.log("====================1,=============",tx)
+        // // We get an instance of the contract
+        // const [ owner ] = await ethers.getSigners();
+        // let tx;
 
-        // tx = await Contract.connect(owner).NumberToBigNumAsm("8587934592");
-        // console.log("====================1,=============",tx)
-
-        // tx = await Contract.connect(owner).NumberToBigNumAsm2("8587934592");
-        // console.log("====================1,=============",tx)
-        // const val1 = await Contract.mulDivNormal("2332387983773948", "9793278532989823979898", "6327987932873948")
-        // console.log("==============mulDivNormal=============", val1)
-
-        // const val2 = await Contract.mulDivNormal2("2332387983773948", "570043835946", "772459464469")
-        // console.log("====================mulDivNormal2,=============",val2)
-
-
-        // const val3 = await Contract.mulDivNormal3("2332387983773948", "570043835946", "772459464469")
-        // console.log("==============mulDivNormal=============", val3)
-
-        // const val4 = await Contract.mulDivNormal4("2332387983773948", "570043835946", "772459464469")
-        // console.log("==============mulDivNormal=============", val4)
-
-        // const val5 = await Contract.mulDivNormal5("2332387983773948", "570043835946", "772459464469")
-        // console.log("==============mulDivNormal=============", val5)
-
-        // const val6 = await Contract.mulDivNormal6("2332387983773948", "570043835946", "772459464469")
-        // console.log("==============mulDivNormal=============", val6)
-
-        // const val7 = await Contract.mulDivNormal7("2332387983773948", "570043835946", "772459464469")
-        // console.log("==============mulDivNormal=============", val7)
-
-        // const tt1 = await Contract.NumberToBigNumAsm2("24448551293836797297757950")
-        // // const tt2 = await Contract.NumberToBigNumAsm2("3948179283")
-
-        // console.log(tt1)
-        // console.log(tt2)
-
-        // const aaa = await Contract.NumberToBigNumAsm2("4")
-        // console.log(aaa)
-
-        // const test1 = await Contract.mulDivBignumber("572283163178", "9817912874298", "3948179283")
-        // console.log(test1)
-
-        // const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
-        // console.log(test2)
-
-        const test3 = await Contract.getRatioAtTick("-443635")
-        console.log(test3)
-        const test33 = await Contract.getRatioAtTick2("-443635")
-        console.log(test33)
-        const test4 = await Contract.getRatioAtTickAsm("-443635")
-        console.log(test4)
+        const test3 = await Contract.getRatioAtTick("64")
+        console.log("====================getRatioAtTick=====================",test3)
+        const test = await Contract.getTickAtRatio(test3.toString())
+        console.log("==========================getTickAtRatio===================",test)
+        
     });
 });
