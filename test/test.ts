@@ -79,9 +79,11 @@ describe("Converter", function () {
         // }
         let test3 = await Contract.getRatioAtTick(443635)
         console.log(test3)
-        // test3 = await Contract.getRatioAtTick(-443635)
-        // console.log(test3)
+        test3 = await Contract.getRatioAtTick2(443635)
+        console.log(test3)
         let test4 = await Contract.getTickAtRatio(test3.res.toString())
+        console.log(test4)
+        test4 = await Contract.getTickAtRatio2(test3.res.toString())
         console.log(test4)
     });
 });

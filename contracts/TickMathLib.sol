@@ -38,7 +38,7 @@ library TickMath {
         1461300573427867316570072651998408279850435624081; // TODO: calculate this after building the getRatioAtTick(MAX_TICK) function
 
     uint256 internal constant zeroTickScaledRatio = 0x1000000000000000000000000; // 1 << 96
-
+    uint256 internal constant _1E18 = 1000000000000000000;
     /**
      * @notice ratioX96 = (1.0001^tick) * 2^96
      * @dev Throws if |tick| > max tick
@@ -88,6 +88,108 @@ library TickMath {
         }
 
         ratioX96_ = (factor_ >> 32) + precision_;
+    }
+
+    function getRatioAtTickAsm(int24 tick_)
+        internal
+        pure
+        returns (uint256 ratioX96_) 
+    {
+        assembly{
+            let absTick_ := tick_
+            absTick_ := sub(xor(tick_, sar(255, tick_)), sar(255, tick_))
+            if eq(absTick_, MAX_TICK) {
+                revert(0, 0)
+            }
+            let factor_ := FACTOR00
+            let cond := and(absTick_, 0x1)
+            if cond {
+                factor_ := FACTOR01
+            }
+            cond := and(absTick_, 0x2)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR02))
+            }
+            cond := and(absTick_, 0x4)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR03))
+            }
+            cond := and(absTick_, 0x8)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR04))
+            }
+            cond := and(absTick_, 0x10)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR05))
+            }
+            cond := and(absTick_, 0x20)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR06))
+            }
+            cond := and(absTick_, 0x40)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR07))
+            }
+            cond := and(absTick_, 0x80)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR08))
+            }
+            cond := and(absTick_, 0x100)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR09))
+            }
+            cond := and(absTick_, 0x200)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR10))
+            }
+            cond := and(absTick_, 0x400)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR11))
+            }
+            cond := and(absTick_, 0x800)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR12))
+            }
+            cond := and(absTick_, 0x1000)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR13))
+            }
+            cond := and(absTick_, 0x2000)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR14))
+            }
+            cond := and(absTick_, 0x4000)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR15))
+            }
+            cond := and(absTick_, 0x8000)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR16))
+            }
+            cond := and(absTick_, 0x10000)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR17))
+            }
+            cond := and(absTick_, 0x20000)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR18))
+            }
+            cond := and(absTick_, 0x40000)
+            if cond {
+                factor_ := shr(128, mul(factor_, FACTOR19))
+            }
+            let precision_ := 0
+            cond := and(tick_, 0x8000000000000000000000000000000000000000000000000000000000000000)
+            if iszero(cond) {
+                factor_ := div(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,  factor_)
+                // we round up in the division so getTickAtSqrtRatio of the output price is always consistent
+                cond := mod(factor_, 0x100000000)
+                if cond {
+                    precision_ := 1
+                }
+            }
+            ratioX96_ := add(shr(32, factor_), precision_)
+        }
     }
 
        /**
@@ -192,6 +294,124 @@ library TickMath {
             tick_ = -tick_;
         }
     }
+
+    function getTickAtRatioAsm(uint256 ratioX96_)
+        internal
+        pure
+        returns (int24 tick_, uint256 factor_)
+    {
+        assembly {
+            if or(gt(ratioX96_, MAX_RATIOX96), lt(ratioX96_, MIN_RATIOX96)) {
+                revert(0, 0)
+            }
+            let cond := lt(ratioX96_, zeroTickScaledRatio)
+            if iszero(cond) {
+                factor_ := div(mul(ratioX96_, _1E18), zeroTickScaledRatio)
+            }
+            if cond {
+                factor_ := div(mul(zeroTickScaledRatio, _1E18), ratioX96_)
+            }
+
+            cond := lt(factor_, 242214459604341000000000000000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x40000)
+                factor_ := div(mul(factor_, _1E18), 242214459604341000000000000000)
+            }
+            cond := lt(factor_, 492152882348911000000000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x20000)
+                factor_ := div(mul(factor_, _1E18), 492152882348911000000000)
+            }
+            cond := lt(factor_, 701536087702486600000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x10000)
+                factor_ := div(mul(factor_, _1E18), 701536087702486600000)
+            }
+            cond := lt(factor_, 26486526531474190000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x8000)
+                factor_ := div(mul(factor_, _1E18), 26486526531474190000)
+            }
+            cond := lt(factor_, 5146506245160322000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x4000)
+                factor_ := div(mul(factor_, _1E18), 5146506245160322000)
+            }
+            cond := lt(factor_, 2268591246822644000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x2000)
+                factor_ := div(mul(factor_, _1E18), 2268591246822644000)
+            }
+            cond := lt(factor_, 1506184333613467000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x1000)
+                factor_ := div(mul(factor_, _1E18), 1506184333613467000)
+            }
+            cond := lt(factor_, 1227267018058200000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x800)
+                factor_ := div(mul(factor_, _1E18), 1227267018058200000)
+            }
+            cond := lt(factor_, 1107820842039993000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x400)
+                factor_ := div(mul(factor_, _1E18), 1107820842039993000)
+            }
+            cond := lt(factor_, 1052530684607338000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x200)
+                factor_ := div(mul(factor_, _1E18), 1052530684607338000)
+            }
+            cond := lt(factor_, 1025929181087729000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x100)
+                factor_ := div(mul(factor_, _1E18), 1025929181087729000)
+            }
+            cond := lt(factor_, 1012881622445451000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x80)
+                factor_ := div(mul(factor_, _1E18), 1012881622445451000)
+            }
+            cond := lt(factor_, 1006420201727613000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x40)
+                factor_ := div(mul(factor_, _1E18), 1006420201727613000)
+            }
+            cond := lt(factor_, 1003204964963598000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x20)
+                factor_ := div(mul(factor_, _1E18), 1003204964963598000)
+            }
+            cond := lt(factor_, 1001601200560182000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x10)
+                factor_ := div(mul(factor_, _1E18), 1001601200560182000)
+            }
+            cond := lt(factor_, 1000800280056006999)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x8)
+                factor_ := div(mul(factor_, _1E18), 1000800280056006999)
+            }
+            cond := lt(factor_, 1000400060004000000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x4)
+                factor_ := div(mul(factor_, _1E18), 1000400060004000000)
+            }
+            cond := lt(factor_, 1000200010000000000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x2)
+                factor_ := div(mul(factor_, _1E18), 1000200010000000000)
+            }
+            cond := lt(factor_, 1000100000000000000)
+            if iszero(cond) {
+                tick_ := or(tick_, 0x1)
+            }
+            cond := lt(ratioX96_, zeroTickScaledRatio)
+            if cond {
+                tick_ := add(not(tick_), 1)
+            }
+        }
+    }
 }
 
 contract TickMathTest {
@@ -204,9 +424,21 @@ contract TickMathTest {
         gasUsed = initialGas - gasleft();
     }
 
+    function getRatioAtTick2(int24 tick_) external view returns(uint256 res, uint256 gasUsed) {
+        uint256 initialGas = gasleft();
+        res = TickMath.getRatioAtTickAsm(tick_);
+        gasUsed = initialGas - gasleft();
+    }
+
     function getTickAtRatio(uint256 ratio) external view returns(int24 tick, uint256 factor, uint256 gasUsed) {
         uint256 initialGas = gasleft();
         (tick, factor) = TickMath.getTickAtRatioUpdate(ratio);
+        gasUsed = initialGas - gasleft();
+    }
+
+    function getTickAtRatio2(uint256 ratio) external view returns(int24 tick, uint256 factor, uint256 gasUsed) {
+        uint256 initialGas = gasleft();
+        (tick, factor) = TickMath.getTickAtRatioAsm(ratio);
         gasUsed = initialGas - gasleft();
     }
 }
