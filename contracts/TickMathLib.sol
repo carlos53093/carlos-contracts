@@ -2,40 +2,34 @@
 pragma solidity ^0.8.12;
 import "hardhat/console.sol";
 
-/**
- * @title Math library for computing ratios from ticks and vice versa
- * @notice Computes ratios for ticks of size 1.0001, i.e. 1.0001^tick as fixed point. Supports
- * ratios between 2**-128 and 2**128
- */
-
 library TickMath {
-    // The minimum tick that may be passed to #getRatioFromTick computed from log base 1.0001 of 2**-128
+    // The minimum tick that may be passed to #getRatioFromTick computed from (log base 1.0001 of 2**-128) / 2
     int24 internal constant MIN_TICK = -443636;
     // The maximum tick that may be passed to #getRatioFromTick computed from log base 1.0001 of 2**128
     int24 internal constant MAX_TICK = 443636;
 
     uint256 internal constant FACTOR00 = 0x100000000000000000000000000000000;
-    uint256 internal constant FACTOR01 = 0xfff97272373d413259a46990580e2139;
-    uint256 internal constant FACTOR02 = 0xfff2e50f5f656932ef12357cf3c7fdcb;        // 1.0001 ** 2
-    uint256 internal constant FACTOR03 = 0xffe5caca7e10e4e61c3624eaa0941ccf;        // 1.0001 ** 4
-    uint256 internal constant FACTOR04 = 0xffcb9843d60f6159c9db58835c926643;        // 1.0001 ** 8
+    uint256 internal constant FACTOR01 = 0xfff97272373d413259a46990580e213a;
+    uint256 internal constant FACTOR02 = 0xfff2e50f5f656932ef12357cf3c7fdcc;        // 1.0001 ** 2
+    uint256 internal constant FACTOR03 = 0xffe5caca7e10e4e61c3624eaa0941cd0;        // 1.0001 ** 4
+    uint256 internal constant FACTOR04 = 0xffcb9843d60f6159c9db58835c926644;        // 1.0001 ** 8
 
     // TODO: calculate factors: Formula:= factor => (uint256.max / ((1.0001 ** tick) << 128))
-    uint256 internal constant FACTOR05 = 0xff973b41fa98c081472e6896dfb254bf;      // 1.0001 ** 16
+    uint256 internal constant FACTOR05 = 0xff973b41fa98c081472e6896dfb254c0;      // 1.0001 ** 16
     uint256 internal constant FACTOR06 = 0xff2ea16466c96a3843ec78b326b52861;      // 1.0001 ** 32
     uint256 internal constant FACTOR07 = 0xfe5dee046a99a2a811c461f1969c3053;      // 1.0001 ** 64
     uint256 internal constant FACTOR08 = 0xfcbe86c7900a88aedcffc83b479aa3a4;      // 1.0001 ** 128
     uint256 internal constant FACTOR09 = 0xf987a7253ac413176f2b074cf7815e54;      // 1.0001 ** 256
-    uint256 internal constant FACTOR10 = 0xf3392b0822b70005940c7a398e4b70f2;      // 1.0001 ** 512
-    uint256 internal constant FACTOR11 = 0xe7159475a2c29b7443b29c7fa6e889d8;      // 1.0001 ** 1024
+    uint256 internal constant FACTOR10 = 0xf3392b0822b70005940c7a398e4b70f3;      // 1.0001 ** 512
+    uint256 internal constant FACTOR11 = 0xe7159475a2c29b7443b29c7fa6e889d9;      // 1.0001 ** 1024
     uint256 internal constant FACTOR12 = 0xd097f3bdfd2022b8845ad8f792aa5825;      // 1.0001 ** 2048
-    uint256 internal constant FACTOR13 = 0xa9f746462d870fdf8a65dc1f90e061e4;      // 1.0001 ** 4096
-    uint256 internal constant FACTOR14 = 0x70d869a156d2a1b890bb3df62baf32f6;      // 1.0001 ** 8192
-    uint256 internal constant FACTOR15 = 0x31be135f97d08fd981231505542fcfa5;      // 1.0001 ** 16384
-    uint256 internal constant FACTOR16 = 0x09aa508b5b7a84e1c677de54f3e99bc8;      // 1.0001 ** 32768
+    uint256 internal constant FACTOR13 = 0xa9f746462d870fdf8a65dc1f90e061e5;      // 1.0001 ** 4096
+    uint256 internal constant FACTOR14 = 0x70d869a156d2a1b890bb3df62baf32f7;      // 1.0001 ** 8192
+    uint256 internal constant FACTOR15 = 0x31be135f97d08fd981231505542fcfa6;      // 1.0001 ** 16384
+    uint256 internal constant FACTOR16 = 0x9aa508b5b7a84e1c677de54f3e99bc9;      // 1.0001 ** 32768
     uint256 internal constant FACTOR17 = 0x5d6af8dedb81196699c329225ee604;     // 1.0001 ** 65536
-    uint256 internal constant FACTOR18 = 0x2216e584f5fa1ea926041bedfe97;   // 1.0001 ** 131072
-    uint256 internal constant FACTOR19 = 0x048a170391f7dc42444e8fa2;   // 1.0001 ** 262144
+    uint256 internal constant FACTOR18 = 0x2216e584f5fa1ea926041bedfe98;   // 1.0001 ** 131072
+    uint256 internal constant FACTOR19 = 0x48a170391f7dc42444e8fa2;   // 1.0001 ** 262144
 
     // The minimum value that can be returned from #getRatioAtTick. Equivalent to getRatioAtTick(MIN_TICK)
     uint160 internal constant MIN_RATIOX96 = 4295128738;
@@ -102,9 +96,7 @@ library TickMath {
      * @param ratioX96_ The input ratio; ratio = (debt amount/collateral amount)
      * @return tick_ The output tick for the above formula
      */
-    
-
-    function getTickAtRatio(uint256 ratioX96_)
+    function getTickAtRatioUpdate(uint256 ratioX96_)
         internal
         pure
         returns (int24 tick_, uint256 factor_)
@@ -119,74 +111,74 @@ library TickMath {
 
         /// TODO: Fix the updated according to the below structure
 
-        if (factor_ >= 242214459604341065650571799094) {
+        if (factor_ >= 242214459604341000000000000000) {
             tick_ |= 0x40000;
-            factor_ = (factor_) * 1e18 / 242214459604341065650571799094;
+            factor_ = (factor_) * 1e18 / 242214459604341000000000000000;
         }
-        if (factor_ >= 492152882348911033633684) {
+        if (factor_ >= 492152882348911000000000) {
             tick_ |= 0x20000;
-            factor_ = (factor_) * 1e18 / 492152882348911033633684;
+            factor_ = (factor_) * 1e18 / 492152882348911000000000;
         }
-        if (factor_ >= 701536087702486644953) {
+        if (factor_ >= 701536087702486600000) {
             tick_ |= 0x10000;
-            factor_ = (factor_) * 1e18 / 701536087702486644953;
+            factor_ = (factor_) * 1e18 / 701536087702486600000;
         }
-        if (factor_ >= 26486526531474198664) {
+        if (factor_ >= 26486526531474190000) {
             tick_ |= 0x8000;
-            factor_ = (factor_) * 1e18 / 26486526531474198664;
+            factor_ = (factor_) * 1e18 / 26486526531474190000;
         }
-        if (factor_ >= 5146506245160322223) {
+        if (factor_ >= 5146506245160322000) {
             tick_ |= 0x4000;
-            factor_ = (factor_) * 1e18 / 5146506245160322223;
+            factor_ = (factor_) * 1e18 / 5146506245160322000;
         }
-        if (factor_ >= 2268591246822644827) {
+        if (factor_ >= 2268591246822644000) {
             tick_ |= 0x2000;
-            factor_ = (factor_) * 1e18 / 2268591246822644827;
+            factor_ = (factor_) * 1e18 / 2268591246822644000;
         }
-        if (factor_ >= 1506184333613467388) {
+        if (factor_ >= 1506184333613467000) {
             tick_ |= 0x1000;
-            factor_ = (factor_) * 1e18 / 1506184333613467388;
+            factor_ = (factor_) * 1e18 / 1506184333613467000;
         }
-        if (factor_ >= 1227267018058200482) {
+        if (factor_ >= 1227267018058200000) {
             tick_ |= 0x800;
-            factor_ = (factor_) * 1e18 / 1227267018058200482;
+            factor_ = (factor_) * 1e18 / 1227267018058200000;
         }
-        if (factor_ >= 1107820842039993614) {
+        if (factor_ >= 1107820842039993000) {
             tick_ |= 0x400;
-            factor_ = (factor_) * 1e18 / 1107820842039993614;
+            factor_ = (factor_) * 1e18 / 1107820842039993000;
         }
-        if (factor_ >= 1052530684607338948) {
+        if (factor_ >= 1052530684607338000) {
             tick_ |= 0x200;
-            factor_ = (factor_) * 1e18 / 1052530684607338948;
+            factor_ = (factor_) * 1e18 / 1052530684607338000;
         }
-        if (factor_ >= 1025929181087729344) {
+        if (factor_ >= 1025929181087729000) {
             tick_ |= 0x100;
-            factor_ = (factor_) * 1e18 / 1025929181087729344;
+            factor_ = (factor_) * 1e18 / 1025929181087729000;
         }
-        if (factor_ >= 1012881622445451097) {
+        if (factor_ >= 1012881622445451000) {
             tick_ |= 0x80;
-            factor_ = (factor_) * 1e18 / 1012881622445451097;
+            factor_ = (factor_) * 1e18 / 1012881622445451000;
         }
-        if (factor_ >= 1006420201727613920) {
+        if (factor_ >= 1006420201727613000) {
             tick_ |= 0x40;
-            factor_ = (factor_) * 1e18 / 1006420201727613920;
+            factor_ = (factor_) * 1e18 / 1006420201727613000;
         }
-        if (factor_ >= 1003204964963598015) {
+        if (factor_ >= 1003204964963598000) {
             tick_ |= 0x20;
-            factor_ = (factor_) * 1e18 / 1003204964963598015;
+            factor_ = (factor_) * 1e18 / 1003204964963598000;
         }
-        if (factor_ >= 1001601200560182044) {
+        if (factor_ >= 1001601200560182000) {
             tick_ |= 0x10;
-            factor_ = (factor_) * 1e18 / 1001601200560182044;
+            factor_ = (factor_) * 1e18 / 1001601200560182000;
         }
-        if (factor_ >= 1000800280056007001) {
+        if (factor_ >= 1000800280056006999) {
             tick_ |= 0x8;
-            factor_ = (factor_) * 1e18 / 1000800280056007001;
+            factor_ = (factor_) * 1e18 / 1000800280056006999;
         }
 
-        if (factor_ >= 1000400060004000100) {
+        if (factor_ >= 1000400060004000000) {
             tick_ |= 0x4;
-            factor_ = (factor_) * 1e18 / 1000400060004000100;
+            factor_ = (factor_) * 1e18 / 1000400060004000000;
         }
         if (factor_ >= 1000200010000000000) {
             tick_ |= 0x2;
@@ -214,7 +206,7 @@ contract TickMathTest {
 
     function getTickAtRatio(uint256 ratio) external view returns(int24 tick, uint256 factor, uint256 gasUsed) {
         uint256 initialGas = gasleft();
-        (tick, factor) = TickMath.getTickAtRatio(ratio);
+        (tick, factor) = TickMath.getTickAtRatioUpdate(ratio);
         gasUsed = initialGas - gasleft();
     }
 }

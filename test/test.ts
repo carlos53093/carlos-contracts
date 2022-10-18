@@ -66,54 +66,16 @@ describe("Converter", function () {
         // // const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
         // // console.log(test2)
 
-        let test3 = await Contract.getRatioAtTick("0")
-        console.log(test3)
-        let test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("1")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("2")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("4")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("8")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("16")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("32")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("223")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("-223")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
-
-        test3 = await Contract.getRatioAtTick("-5")
-        console.log(test3)
-        test4 = await Contract.getTickAtRatio(test3.res.toString())
-        console.log(test4)
+        for(let i = 10000; i < 443636; i++) {
+            let test3 = await Contract.getRatioAtTick(i)
+            let test4 = await Contract.getTickAtRatio(test3.res.toString())
+            if(test4.tick !== i) {
+                console.error("==================================Error==========================")
+                console.error(test3)
+                console.error(test4)
+                break;
+            }
+            console.log(i)
+        }
     });
 });

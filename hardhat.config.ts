@@ -15,7 +15,7 @@ import '@nomiclabs/hardhat-waffle'
 import '@tenderly/hardhat-tenderly'
 import '@openzeppelin/hardhat-upgrades'
 import '@typechain/hardhat'
-import "hardhat-contract-sizer";
+// import "hardhat-contract-sizer";
 
 // Networks
 
@@ -84,11 +84,11 @@ const config: HardhatUserConfig = {
             enabled: true,
             runs: 1,
           },
-          outputSelection: {
-            '*': {
-              '*': ['storageLayout'],
-            },
-          },
+          // outputSelection: {
+          //   '*': {
+          //     '*': ['storageLayout'],
+          //   },
+          // },
         },
       },
     ],
@@ -96,8 +96,8 @@ const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
-      chainId: 31337,
-      loggingEnabled: true,
+      // chainId: 31337,
+      // loggingEnabled: true,
       // forking: {
       //   url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
       //   enabled: true,
@@ -133,11 +133,11 @@ const config: HardhatUserConfig = {
   //   clear: false,
   //   flat: true,
   // },
-  contractSizer: {
-    alphaSort: true,
-    runOnCompile: false,
-    disambiguatePaths: true,
-  },
+  // contractSizer: {
+  //   alphaSort: true,
+  //   runOnCompile: false,
+  //   disambiguatePaths: true,
+  // },
 }
 
 setupDefaultNetworkProviders(config)
