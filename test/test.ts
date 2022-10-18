@@ -66,16 +66,22 @@ describe("Converter", function () {
         // // const test2 = await Contract.mulDivBignumberAsm("572283163178", "9817912874298", "3948179283")
         // // console.log(test2)
 
-        for(let i = 10000; i < 443636; i++) {
-            let test3 = await Contract.getRatioAtTick(i)
-            let test4 = await Contract.getTickAtRatio(test3.res.toString())
-            if(test4.tick !== i) {
-                console.error("==================================Error==========================")
-                console.error(test3)
-                console.error(test4)
-                break;
-            }
-            console.log(i)
-        }
+        // for(let i = 10000; i < 443636; i++) {
+        //     let test3 = await Contract.getRatioAtTick(i)
+        //     let test4 = await Contract.getTickAtRatio(test3.res.toString())
+        //     if(test4.tick !== i) {
+        //         console.error("==================================Error==========================")
+        //         console.error(test3)
+        //         console.error(test4)
+        //         break;
+        //     }
+        //     console.log(i)
+        // }
+        let test3 = await Contract.getRatioAtTick(443635)
+        console.log(test3)
+        // test3 = await Contract.getRatioAtTick(-443635)
+        // console.log(test3)
+        let test4 = await Contract.getTickAtRatio(test3.res.toString())
+        console.log(test4)
     });
 });

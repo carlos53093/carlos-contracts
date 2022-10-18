@@ -32,10 +32,10 @@ library TickMath {
     uint256 internal constant FACTOR19 = 0x48a170391f7dc42444e8fa2;   // 1.0001 ** 262144
 
     // The minimum value that can be returned from #getRatioAtTick. Equivalent to getRatioAtTick(MIN_TICK)
-    uint160 internal constant MIN_RATIOX96 = 4295128738;
+    uint160 internal constant MIN_RATIOX96 = 4295558251;
     // The maximum value that can be returned from #getRatioAtTick. Equivalent to getRatioAtTick(MAX_TICK)
     uint160 internal constant MAX_RATIOX96 =
-        1461446703465753933232717873162397069014578322804; // TODO: calculate this after building the getRatioAtTick(MAX_TICK) function
+        1461300573427867316570072651998408279850435624081; // TODO: calculate this after building the getRatioAtTick(MAX_TICK) function
 
     uint256 internal constant zeroTickScaledRatio = 0x1000000000000000000000000; // 1 << 96
 
