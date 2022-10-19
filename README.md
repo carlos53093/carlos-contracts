@@ -12,25 +12,6 @@
 | **when not matching params type** |  108 | 81 |
 
 
-When using assembly for if conditions were also efficient but no more than using uint8 instead of uint256.
-When using uint8, we don't need to use require statement.
-When not using require statement the gas fee of restore() funtion was 100 and store() function was 0.
-
-**function storeNumber(uint256 store, uint256 value, uint8 offset, uint8 size) internal pure returns(uint256);**<br>
-**function restoreNumber(uint256 store, uint8 offset, uint8 size) internal pure returns(uint256);** 
-are the most efficient in final.
-
-I pushed it into new file "FOptimizer.sol"
-
-You can check it in this file
-
-**when not matching params type it led to gasfee higher.**
-
-**For example:**
-
-![vmplayer_mSM5qWhIXY](https://user-images.githubusercontent.com/94333672/193109482-bd565e77-1dd1-404f-bc1b-5f1be4f5b4bb.png)
-
-
  ## ConverterTest contract
 
 
@@ -51,32 +32,23 @@ You can check it in this file
 | function name | Param | gas fee |
 | ------ | ------ | ------ |
 | getRatioAtTick | 443635(max op) | 2000 |
-| getRatioAtTickAsm | 443635(max op) | 1028 |
+| getRatioAtTickAsm | 443635(max op) | 840 |
 | getTickAtRatioUpdate | 443635 | 2590 |
-| getTickAtRatioAsm | 443635 | 1146 |
+| getTickAtRatioAsm | 443635 | 1037 |
 
 
-| tick | ratio | tick |
+ ## Gas Fee For Each Library
+
+ | function name | Input | gas fee |
 | ------ | ------ | ------ |
-| 0 | 79228162514264337593543950336 | 0 |
-| 1 | 79236085330515764027303304732 | 1 |
-| 2 | 79244008939048815603706035062 | 2 |
-| 4 | 79259858533276714757314932306 | 3 |
-| 8 | 79291567232598584799939703905 | 7 |
-| 16 | 79355022692464371645785046467 | 15 |
-| 32 | 79482085999252804386437311142 | 31 |
-
-- using ethers constants
-
-| tick | ratio | tick |
-| ------ | ------ | ------ |
-| 0 | 79228162514264337593543950336 | 0 |
-| 1 | 79236085330515764027303304732 | 1 |
-| 2 | 79244008939048815603706035062 | 2 |
-| 4 | 79259858533276714757314932306 | 4 |
-| 8 | 79291567232598584799939703905 | 7 |
-| 16 | 79355022692464371645785046467 | 15 |
-| 32 | 79482085999252804386437311142 | 31 |
-| 223 | 79482085999252804386437311142 | 222 |
-| -223 | 79482085999252804386437311142 | -222 |
-| -5 | 79482085999252804386437311142 | -4 |
+| getRatioAtTick | 262143 (Max Ops) | **938** |
+| getTickAtRatio | 19188287740063442132407564769516272930365 | 1303 |
+| getRatioAtTick | -262143 | 894 |
+| getTickAtRatio | 327131936961767012 (max op) | **1307** |
+| N2B | 2**128 | **438** |
+| B2N | _any_ | 21 |
+| mulDivNormal | "2332387983773948", "9793278532989823979898", "6327987932873948" | 187 |
+| decompileBigNumber | 9793278532989823979898 | 38 |
+| mostSignificantBit | 9793278532989823979898 | 371 |
+| storeNumber | _ | 60 |
+| restoreNumber | _ | 45 |

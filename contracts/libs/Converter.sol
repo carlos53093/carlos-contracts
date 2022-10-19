@@ -89,7 +89,7 @@ library Converter{
         }
     }
 
-    function mostSignificantBit(uint256 normal) private pure returns (uint8 lastBit_) {
+    function mostSignificantBit(uint256 normal) internal pure returns (uint8 lastBit_) {
         assembly{
             let number_ := normal
             if gt(normal, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
