@@ -1,54 +1,98 @@
 # Benchmark
 
  ## OptimizerTest contract
+<br />
+1. Function N2B
 
-| mode | gasfee in store | gasfee in restore |
+ | input value | gas fee in normal | gas fee in Asm
 | ------ | ------ | ------ |
-| using bitwise operation |  276 | 249 |
-| using bitwise operation using uint8 (remove if conditions) |  211 | 186 |
-| using assembly |  186 | 162 |
-| using uint8 instead of uint256 (remove if conditions) |  60 | 45 |
-| using uint256 (remove if conditions) |  60 | 45 |
-| **when not matching params type** |  108 | 81 |
+| 2 ** 249 |  1370 | 524 | 
+| 2 ** 251 |  1488 | 542 | 
+| 2 ** 166 |  1166 | 492 | 
+| 2 ** 66 |  930 | 460 | 
+| 2 ** 181 |  1252 | 506 | 
+| 2 ** 79 |  1252 | 510 | 
+| 2 ** 216 |  1166 | 492 | 
+| 2 ** 176 |  1048 | 474 | 
+
+<br />
+
+2. Function B2N
+
+| input value | gas fee in normal | gas fee in Asm
+| ------ | ------ | ------ |
+| 1556798, 12 |  21 | 16 |
+| 21356479, 31 |  21 | 16 |
+
+<br />
+
+3. mulDivNormal 
+
+| input value | gas fee in normal | gas fee in Asm
+| ------ | ------ | ------ |
+| 281474976710656, 265046402172, 178478830197 |  187 | 391 |
+| 102844034832575377634685573909834406561420991602098741459288064, 1027019694637, 757246257059 |  187 | 381 |
+| 73786976294838206464, 573760658354, 207165067338 |  187 | 391 |
+| 8796093022208, 399742225182, 282148078136 |  187 | 391 |
+
+<br />
+
+4. decompileBigNumber
+
+| input value | gas fee in normal | gas fee in Asm
+| ------ | ------ | ------ |
+| 264532943550 |  38 | 38 |
+| 851894766435 |  38 | 38 |
+
+<br />
+
+5. mostSignificantBit
+
+| input value | gas fee in normal | gas fee in Asm
+| ------ | ------ | ------ |
+| 11972621413014756705924586149611790497021399392059392 |  946 | 403 |
+| 10141204801825835211973625643008 |  946 | 407 |
+| 32768 |  828 | 389 |
+| 842498333348457493583344221469363458551160763204392890034487820288 |  1064 | 421 |
+| 8 |  592 | 353 |
+
+<br />
+
+6. mulDivBignumber
+
+| input value | gas fee in normal | gas fee in Asm
+| ------ | ------ | ------ |
+| 1068907126826 39614081257132168796771975168 2 |  1509 | 667 |
+| 53905846627 5708990770823839524233143877797980545530986496 618970019642690137449562112 |  1305 | 635 |
+| 86575854077 8796093022208 5986310706507378352962293074805895248510699696029696 |  1014 | 1651 |
+| 897048098013 2048 144115188075855872 |  1014 | 1651 |
+| 188104851293 4 1024 |  1160 | 618 |
 
 
  ## ConverterTest contract
 
+| Function Name | gas fee in normal | gas fee in Asm
+| ------ | ------ | ------ |
+| store | 278 | 42 |
+| restore | 303 | 57 |
 
- | function name | gas fee |
-| ------ | ------ |
-| N2B |  451 |
-| B2N |  16 |
-| decompileBigNumber |  38 |
-| mulDivNormal |  187 |
-| mulDivBignumber |  974 |
-| mulDivBignumberAsm |  659 |
-| mulDivBignumberAsm2 |  613 |
 
  <br/>
  
  ## TickMathLib Library
 
-| function name | Param | gas fee |
-| ------ | ------ | ------ |
-| getRatioAtTick | 443635(max op) | 2000 |
-| getRatioAtTickAsm | 443635(max op) | 840 |
-| getTickAtRatioUpdate | 443635 | 2590 |
-| getTickAtRatioAsm | 443635 | 1037 |
+| function name | Input | gas fee in normal | gas fee in Asm
+| ------ | ------ | ------ | ------ |
+| getRatioAtTick | 426646 | 1804 | 807
+| getTickAtRatio | 267272052060619743615293038242434371837443759873 | 2214 | 935
+| getRatioAtTick | 243681 | 2106 | 854
+| getTickAtRatio | 3028878391613283229097180315929250081113 | 2762 | 1063
+| getRatioAtTick | 3053 | 1788 | 812
+| getTickAtRatio | 107513514821244845233501614951 | 2762 | 1063
+| getRatioAtTick | -210789 | 1886 | 796
+| getTickAtRatio | 55576004513528156572 | 2665 | 1028
+| getRatioAtTick | -365577 | 1462 | 740
+| getTickAtRatio | 10540615953074 | 1953 | 876
+| getRatioAtTick | 292805 | 2000 | 840
+| getTickAtRatio | 411721347530044828534398204668445426249575 | 2584 | 1025
 
-
- ## Gas Fee For Each Library
-
- | function name | Input | gas fee |
-| ------ | ------ | ------ |
-| getRatioAtTick | 262143 (Max Ops) | **938** |
-| getTickAtRatio | 19188287740063442132407564769516272930365 | 1303 |
-| getRatioAtTick | -262143 | 894 |
-| getTickAtRatio | 327131936961767012 (max op) | **1307** |
-| N2B | 2**128 | **438** |
-| B2N | _any_ | 21 |
-| mulDivNormal | "2332387983773948", "9793278532989823979898", "6327987932873948" | 187 |
-| decompileBigNumber | 9793278532989823979898 | 38 |
-| mostSignificantBit | 9793278532989823979898 | 371 |
-| storeNumber | _ | 60 |
-| restoreNumber | _ | 45 |
