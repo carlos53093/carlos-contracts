@@ -7,23 +7,23 @@ import "./libs_asm/Converter.sol";
 import "./libs_normal/Converter.sol";
 
 contract TConverterSimulator {
-    function N2B(uint normal) external view returns(uint256 asmcoefficient, uint256 asmexponent, uint256 asmbigNumber, uint256 asmgasUsed, uint256 coefficient, uint256 exponent, uint256 bigNumber, uint256 gasUsed) {
+    function toBigNumber(uint normal) external view returns(uint256 asmcoefficient, uint256 asmexponent, uint256 asmbigNumber, uint256 asmgasUsed, uint256 coefficient, uint256 exponent, uint256 bigNumber, uint256 gasUsed) {
         uint256 initialGas = gasleft();
-        (coefficient, exponent, bigNumber) = ConverterNormal.N2B(normal);
+        (coefficient, exponent, bigNumber) = ConverterNormal.toBigNumber(normal);
         gasUsed = initialGas - gasleft();
 
         initialGas = gasleft();
-        (asmcoefficient, asmexponent, asmbigNumber) = Converter.N2B(normal);
+        (asmcoefficient, asmexponent, asmbigNumber) = Converter.toBigNumber(normal);
         asmgasUsed = initialGas - gasleft();
     }
 
-    function B2N(uint256 coefficient, uint256 exponent) external view returns(uint256 _asmnumber, uint256 asmgasUsed, uint256 _number, uint256 gasUsed) {
+    function fromBigNumber(uint256 coefficient, uint256 exponent) external view returns(uint256 _asmnumber, uint256 asmgasUsed, uint256 _number, uint256 gasUsed) {
         uint256 initialGas = gasleft();
-        _number = ConverterNormal.B2N(coefficient, exponent);
+        _number = ConverterNormal.fromBigNumber(coefficient, exponent);
         gasUsed = initialGas - gasleft();
 
         initialGas = gasleft();
-        _asmnumber = Converter.B2N(coefficient, exponent);
+        _asmnumber = Converter.fromBigNumber(coefficient, exponent);
         asmgasUsed = initialGas - gasleft();
     }
 

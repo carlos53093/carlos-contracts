@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-// This is the most efficient for gas reduction
+/// @title 
+
 pragma solidity ^0.8.12;
 
+/// @title library that represent a number in BigNumber(coefficient and exponent) format and store in uint40.
+/// @notice uint40 is divided into two parts: uint32 for coefficient and uint8 for exponent
+
 library Converter{
-    uint8 constant coefficientMaxSize = 0x20;
-    uint8 constant exponentMaxSize  = 0x08;
+    uint8 constant COEFFICIENTMAXSIZE = 0x20;
+    uint8 constant EXPONENTMAXSIZE = 0x08;
     uint256 internal constant EXPONENTMASK = 0xff;
 
     /***
@@ -23,7 +27,7 @@ library Converter{
       * params: normal => input value with decimal format
       * return:  coefficient, exponent, bigNumber
     ***/
-    function N2B(uint256 normal) internal pure returns(uint256 coefficient, uint256 exponent, uint256 bigNumber) {
+    function toBigNumber(uint256 normal) internal pure returns(uint256 coefficient, uint256 exponent, uint256 bigNumber) {
         assembly{
             let lastBit_
             let number_ := normal
@@ -61,18 +65,18 @@ library Converter{
             if gt(number_, 0) {
                 lastBit_ := add(lastBit_, 1)
             }
-            if lt(lastBit_, coefficientMaxSize) {  // for throw exception
-                lastBit_ := coefficientMaxSize
+            if lt(lastBit_, COEFFICIENTMAXSIZE) {  // for throw exception
+                lastBit_ := COEFFICIENTMAXSIZE
             }
-            exponent := sub(lastBit_, coefficientMaxSize)
+            exponent := sub(lastBit_, COEFFICIENTMAXSIZE)
             coefficient := shr(exponent, normal)
-            bigNumber := shl(exponentMaxSize, coefficient)
+            bigNumber := shl(EXPONENTMAXSIZE, coefficient)
             bigNumber := add(bigNumber, exponent)
         }
     }
 
     /***
-        B2N function
+        fromBigNumber function
         get Normal number from coefficient and exponent
       * @format: 
       * (coefficient[32bits], exponent[8bits])[40bits] => (_number) 
@@ -84,7 +88,7 @@ library Converter{
       *                                               ^-------------------- 51(exponent) -------------- ^
     ***/
 
-    function B2N(uint256 coefficient, uint256 exponent) internal pure returns(uint256 _number) {
+    function fromBigNumber(uint256 coefficient, uint256 exponent) internal pure returns(uint256 _number) {
         assembly{
             _number := shl(exponent, coefficient)
         }
@@ -103,20 +107,20 @@ library Converter{
         @return format 
         res: normal number 53503841411969141
     ***/
-    function mulDivNormal(uint256 _number, uint256 _bigNumber1, uint256 _bigNumber2 ) internal pure returns(uint256 res) {
+    function mulDivNormal(uint256 number1, uint256 bigNumber1, uint256 bigNumber2 ) internal pure returns(uint256 res) {
         assembly {
-            let coefficient1 := shr(exponentMaxSize, _bigNumber1)
-            let exponent1 := and(_bigNumber1, EXPONENTMASK)
-            let coefficient2 := shr(exponentMaxSize, _bigNumber2)
-            let exponent2 := and(_bigNumber2, EXPONENTMASK)
-            let X := gt(exponent1, exponent2)   // _bigNumber2 > _bigNumber1
+            let coefficient1_ := shr(EXPONENTMAXSIZE, bigNumber1)
+            let exponent1_ := and(bigNumber1, EXPONENTMASK)
+            let coefficient2_ := shr(EXPONENTMAXSIZE, bigNumber2)
+            let exponent2_ := and(bigNumber2, EXPONENTMASK)
+            let X := gt(exponent1_, exponent2_)   // bigNumber2 > bigNumber1
             if X {
-                coefficient1 := shl(sub(exponent1, exponent2),coefficient1)
+                coefficient1_ := shl(sub(exponent1_, exponent2_),coefficient1_)
             }
             if iszero(X) {
-                coefficient2 := shl(sub(exponent2, exponent1),coefficient2)
+                coefficient2_ := shl(sub(exponent2_, exponent1_),coefficient2_)
             }
-            res := div(mul(_number, coefficient1), coefficient2)
+            res := div(mul( number1, coefficient1_), coefficient2_)
         }
     }
 
@@ -131,7 +135,7 @@ library Converter{
     ***/
     function decompileBigNumber(uint256 bigNumber) internal pure returns(uint256 coefficient, uint256 exponent) {
         assembly {
-            coefficient := shr(exponentMaxSize, bigNumber)
+            coefficient := shr(EXPONENTMAXSIZE, bigNumber)
             exponent := and(bigNumber, EXPONENTMASK)
         }
     }
@@ -142,44 +146,44 @@ library Converter{
 
       * @format: 
       * 5035703444687813576399599 = 10000101010010110100000011111011110010100110100000000011100101001101001101011101111
-      * lastBit_ =                  ^---------------------------------   83   ----------------------------------------^
+      * lastBit =                  ^---------------------------------   83   ----------------------------------------^
     ***/
-    function mostSignificantBit(uint256 normal) internal pure returns (uint8 lastBit_) {
+    function mostSignificantBit(uint256 normal) internal pure returns (uint8 lastBit) {
         assembly{
             let number_ := normal
             if gt(normal, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF) {
                 number_ := shr(0x80, number_)
-                lastBit_ := 0x80
+                lastBit := 0x80
             }
             if gt(number_, 0xFFFFFFFFFFFFFFFF) {
                 number_ := shr(0x40, number_)
-                lastBit_ := add(lastBit_, 0x40)
+                lastBit := add(lastBit, 0x40)
             }
             if gt(number_, 0xFFFFFFFF) {
                 number_ := shr(0x20, number_)
-                lastBit_ := add(lastBit_, 0x20)
+                lastBit := add(lastBit, 0x20)
             }
             if gt(number_, 0xFFFF) {
                 number_ := shr(0x10, number_)
-                lastBit_ := add(lastBit_, 0x10)
+                lastBit := add(lastBit, 0x10)
             }
             if gt(number_, 0xFF) {
                 number_ := shr(0x8, number_)
-                lastBit_ := add(lastBit_, 0x8)
+                lastBit := add(lastBit, 0x8)
             }
             if gt(number_, 0xF) {
                 number_ := shr(0x4, number_)
-                lastBit_ := add(lastBit_, 0x4)
+                lastBit := add(lastBit, 0x4)
             }
             if gt(number_, 0x3) {
                 number_ := shr(0x2, number_)
-                lastBit_ := add(lastBit_, 0x2)
+                lastBit := add(lastBit, 0x2)
             }
             if gt(number_, 0x1) {
-                lastBit_ := add(lastBit_, 1)
+                lastBit := add(lastBit, 1)
             }
             if gt(number_, 0) {
-                lastBit_ := add(lastBit_, 1)
+                lastBit := add(lastBit, 1)
             }
         }
     }
@@ -200,23 +204,23 @@ library Converter{
 
     function mulDivBignumber (uint256 bigNumber, uint256 number1, uint256 number2) internal pure returns(uint256 result) {
         unchecked{
-            uint256 resultNumerator;
-            uint256 exponent1;
+            uint256 _resultNumerator;
+            uint256 _exponent1;
             assembly{
-                exponent1 := and(bigNumber, EXPONENTMASK)
-                resultNumerator := mul(shr(exponentMaxSize, bigNumber), number1)
+                _exponent1 := and(bigNumber, EXPONENTMASK)
+                _resultNumerator := mul(shr(EXPONENTMAXSIZE, bigNumber), number1)
             }
 
-            if (resultNumerator < number2) {
-                uint256 diffMsb = mostSignificantBit(number2 / resultNumerator);
-                if (diffMsb > exponent1) return 0;
+            if (_resultNumerator < number2) {
+                uint256 diffMsb = mostSignificantBit(number2 / _resultNumerator);
+                if (diffMsb > _exponent1) return 0;
                 assembly{
-                    exponent1 := sub(exponent1, diffMsb)
+                    _exponent1 := sub(_exponent1, diffMsb)
                     number2 := shr(diffMsb, number2)
                 }
             }
-            (, , result) = N2B(resultNumerator / number2);
-            result = result + exponent1;
+            (, , result) = toBigNumber(_resultNumerator / number2);
+            result = result + _exponent1;
         }
     }
 }

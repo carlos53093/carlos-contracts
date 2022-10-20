@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-// This is the most efficient for gas reduction
-
 pragma solidity ^0.8.12;
 
+/// @title library that stores multiple numbers(different size) in single storage slot(256 bits i.e uint256) and restores them
+/// @notice Number will always be less than 256 bits size. Eg: uint8, or 1 bit or 7 bits, etc
 
 library Optimizer{
     error InvalidOffset();
@@ -12,10 +12,10 @@ library Optimizer{
     /***
         storeNumber function
         @formula
-        store (256bits) = XXXX..... .... ... ....0110 1011 0010 1011 .... XXXX
-        offset            ^ ---- 24(offset) --- ^
-        size                                     ^ ---12(size) ----^
-        value                                    ^--27435(value)-- ^
+        store (256bits) = XXXX... ....0110 1011 0010 1011 .... .... .... ... XXXX
+        offset                                            ^ ---- 24(offset) --- ^
+        size                          ^ ---12(size) ----^
+        value                         ^--27435(value)-- ^
 
         @return 
         res = XXXX..... .... ... ....0110 1011 0010 1011 .... XXXX
@@ -30,9 +30,9 @@ library Optimizer{
     /***
         storeNumber function
         @formula
-        store (256bits) = XXXX..... .... ... ....0110 1011 0010 1011 .... XXXX
-        offset            ^ ---- 24(offset) --- ^
-        size                                     ^ ---12(size) ----^
+        store (256bits) = XXXX. ....0110 1011 0010 1011 .... .... .... ... XXXX
+        offset                                          ^ ---- 24(offset) --- ^
+        size                        ^ ---12(size) ----^
 
         @return
         value  0110 1011 0010 1011 (decimal format 27435)

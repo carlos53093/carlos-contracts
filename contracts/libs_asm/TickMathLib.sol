@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 pragma solidity ^0.8.12;
 
+/// @title library that calculates number "tick" and "ratioX96" from this: ratioX96 = (1.0001^tick) * 2^96
+/// @notice "tick" supports between -443636 and 443636.  "ratioX96" supports between  4295558251 and 1461300573427867316570072651998408279850435624081
+
 library TickMath {
     // The minimum tick that may be passed to #getRatioFromTick computed from (log base 1.0001 of 2**-128) / 2
     int24 internal constant MIN_TICK = -443636;
@@ -36,23 +39,23 @@ library TickMath {
     uint160 internal constant MAX_RATIOX96 =
         1461300573427867316570072651998408279850435624081; // TODO: calculate this after building the getRatioAtTick(MAX_TICK) function
 
-    uint256 internal constant zeroTickScaledRatio = 0x1000000000000000000000000; // 1 << 96
+    uint256 internal constant ZEROTICKSCALEDRATIO = 0x1000000000000000000000000; // 1 << 96
     uint256 internal constant _1E18 = 1000000000000000000;
     /**
      * @notice ratioX96 = (1.0001^tick) * 2^96
      * @dev Throws if |tick| > max tick
-     * @param tick_ The input tick for the above formula
-     * @return ratioX96_ ratio = (debt amount/collateral amount)
+     * @param tick The input tick for the above formula
+     * @return ratioX96 ratio = (debt amount/collateral amount)
      */
 
-    function getRatioAtTick(int24 tick_)
+    function getRatioAtTick(int24 tick)
         internal
         pure
-        returns (uint256 ratioX96_) 
+        returns (uint256 ratioX96) 
     {
         assembly{
-            let absTick_ := tick_
-            absTick_ := sub(xor(tick_, sar(255, tick_)), sar(255, tick_))
+            let absTick_ := tick
+            absTick_ := sub(xor(tick, sar(255, tick)), sar(255, tick))
             if eq(absTick_, MAX_TICK) {
                 revert(0, 0)
             }
@@ -116,119 +119,119 @@ library TickMath {
                 factor_ := shr(128, mul(factor_, FACTOR19))
             }
             let precision_ := 0
-            if iszero(and(tick_, 0x8000000000000000000000000000000000000000000000000000000000000000)) {
+            if iszero(and(tick, 0x8000000000000000000000000000000000000000000000000000000000000000)) {
                 factor_ := div(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,  factor_)
                 // we round up in the division so getTickAtSqrtRatio of the output price is always consistent
                 if mod(factor_, 0x100000000) {
                     precision_ := 1
                 }
             }
-            ratioX96_ := add(shr(32, factor_), precision_)
+            ratioX96 := add(shr(32, factor_), precision_)
         }
     }
 
        /**
      * @notice ratioX96 = (1.0001^tick) * 2^96
-     * @dev Throws if ratioX96_ > max ratio || ratioX96 < min ratio
-     * @param ratioX96_ The input ratio; ratio = (debt amount/collateral amount)
-     * @return tick_ The output tick for the above formula
+     * @dev Throws if ratioX96 > max ratio || ratioX96 < min ratio
+     * @param ratioX96 The input ratio; ratio = (debt amount/collateral amount)
+     * @return tick The output tick for the above formula
      */
 
-    function getTickAtRatio(uint256 ratioX96_)
+    function getTickAtRatio(uint256 ratioX96)
         internal
         pure
-        returns (int24 tick_)
+        returns (int24 tick)
     {
         assembly {
-            if or(gt(ratioX96_, MAX_RATIOX96), lt(ratioX96_, MIN_RATIOX96)) {
+            if or(gt(ratioX96, MAX_RATIOX96), lt(ratioX96, MIN_RATIOX96)) {
                 revert(0, 0)
             }
-            let cond := lt(ratioX96_, zeroTickScaledRatio)
+            let cond := lt(ratioX96, ZEROTICKSCALEDRATIO)
             let factor_
             if iszero(cond) {
-                factor_ := div(mul(ratioX96_, _1E18), zeroTickScaledRatio)
+                factor_ := div(mul(ratioX96, _1E18), ZEROTICKSCALEDRATIO)
             }
             if cond {
-                factor_ := div(mul(zeroTickScaledRatio, _1E18), ratioX96_)
+                factor_ := div(mul(ZEROTICKSCALEDRATIO, _1E18), ratioX96)
             }
 
             if iszero(lt(factor_, 242214459604341000000000000000)) {
-                tick_ := or(tick_, 0x40000)
+                tick := or(tick, 0x40000)
                 factor_ := div(mul(factor_, _1E18), 242214459604341000000000000000)
             }
             if iszero(lt(factor_, 492152882348911000000000)) {
-                tick_ := or(tick_, 0x20000)
+                tick := or(tick, 0x20000)
                 factor_ := div(mul(factor_, _1E18), 492152882348911000000000)
             }
             if iszero(lt(factor_, 701536087702486600000)) {
-                tick_ := or(tick_, 0x10000)
+                tick := or(tick, 0x10000)
                 factor_ := div(mul(factor_, _1E18), 701536087702486600000)
             }
             if iszero(lt(factor_, 26486526531474190000)) {
-                tick_ := or(tick_, 0x8000)
+                tick := or(tick, 0x8000)
                 factor_ := div(mul(factor_, _1E18), 26486526531474190000)
             }
             if iszero(lt(factor_, 5146506245160322000)) {
-                tick_ := or(tick_, 0x4000)
+                tick := or(tick, 0x4000)
                 factor_ := div(mul(factor_, _1E18), 5146506245160322000)
             }
             if iszero(lt(factor_, 2268591246822644000)) {
-                tick_ := or(tick_, 0x2000)
+                tick := or(tick, 0x2000)
                 factor_ := div(mul(factor_, _1E18), 2268591246822644000)
             }
             if iszero(lt(factor_, 1506184333613467000)) {
-                tick_ := or(tick_, 0x1000)
+                tick := or(tick, 0x1000)
                 factor_ := div(mul(factor_, _1E18), 1506184333613467000)
             }
             if iszero(lt(factor_, 1227267018058200000)) {
-                tick_ := or(tick_, 0x800)
+                tick := or(tick, 0x800)
                 factor_ := div(mul(factor_, _1E18), 1227267018058200000)
             }
             if iszero(lt(factor_, 1107820842039993000)) {
-                tick_ := or(tick_, 0x400)
+                tick := or(tick, 0x400)
                 factor_ := div(mul(factor_, _1E18), 1107820842039993000)
             }
             if iszero(lt(factor_, 1052530684607338000)) {
-                tick_ := or(tick_, 0x200)
+                tick := or(tick, 0x200)
                 factor_ := div(mul(factor_, _1E18), 1052530684607338000)
             }
             if iszero(lt(factor_, 1025929181087729000)) {
-                tick_ := or(tick_, 0x100)
+                tick := or(tick, 0x100)
                 factor_ := div(mul(factor_, _1E18), 1025929181087729000)
             }
             if iszero(lt(factor_, 1012881622445451000)) {
-                tick_ := or(tick_, 0x80)
+                tick := or(tick, 0x80)
                 factor_ := div(mul(factor_, _1E18), 1012881622445451000)
             }
             if iszero(lt(factor_, 1006420201727613000)) {
-                tick_ := or(tick_, 0x40)
+                tick := or(tick, 0x40)
                 factor_ := div(mul(factor_, _1E18), 1006420201727613000)
             }
             if iszero(lt(factor_, 1003204964963598000)) {
-                tick_ := or(tick_, 0x20)
+                tick := or(tick, 0x20)
                 factor_ := div(mul(factor_, _1E18), 1003204964963598000)
             }
             if iszero(lt(factor_, 1001601200560182000)) {
-                tick_ := or(tick_, 0x10)
+                tick := or(tick, 0x10)
                 factor_ := div(mul(factor_, _1E18), 1001601200560182000)
             }
             if iszero(lt(factor_, 1000800280056006999)) {
-                tick_ := or(tick_, 0x8)
+                tick := or(tick, 0x8)
                 factor_ := div(mul(factor_, _1E18), 1000800280056006999)
             }
             if iszero(lt(factor_, 1000400060004000000)) {
-                tick_ := or(tick_, 0x4)
+                tick := or(tick, 0x4)
                 factor_ := div(mul(factor_, _1E18), 1000400060004000000)
             }
             if iszero(lt(factor_, 1000200010000000000)) {
-                tick_ := or(tick_, 0x2)
+                tick := or(tick, 0x2)
                 factor_ := div(mul(factor_, _1E18), 1000200010000000000)
             }
             if iszero(lt(factor_, 1000100000000000000)) {
-                tick_ := or(tick_, 0x1)
+                tick := or(tick, 0x1)
             }
             if cond {
-                tick_ := add(not(tick_), 1)
+                tick := add(not(tick), 1)
             }
         }
     }

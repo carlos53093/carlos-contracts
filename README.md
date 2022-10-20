@@ -2,7 +2,7 @@
 
  ## OptimizerTest contract
 <br />
-1. Function N2B
+1. Function toBigNumber
 
  | input value | gas fee in normal | gas fee in Asm
 | ------ | ------ | ------ |
@@ -17,7 +17,7 @@
 
 <br />
 
-2. Function B2N
+2. Function fromBigNumber
 
 | input value | gas fee in normal | gas fee in Asm
 | ------ | ------ | ------ |

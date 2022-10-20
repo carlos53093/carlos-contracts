@@ -17,15 +17,15 @@ describe("Converter", function () {
         // for(let i = 0; i < 10; i++) {
         //     const exponent = Math.round(Math.random() * 256)
         //     test  = ethers.BigNumber.from(2).pow(exponent);
-        //     test = await Contract.N2B(test.toString())
-        //     console.log("======N2B=====", "2**",exponent, test)
+        //     test = await Contract.toBigNumber(test.toString())
+        //     console.log("======toBigNumber=====", "2**",exponent, test)
         // }
         // console.log("================== =====================")
-        // test = await Contract.B2N(1556798,12)
-        // console.log("======N2B=====","Input value 15, 12,", test)
+        // test = await Contract.fromBigNumber(1556798,12)
+        // console.log("======toBigNumber=====","Input value 15, 12,", test)
 
-        // test = await Contract.B2N(21356479,31)
-        // console.log("======N2B=====","Input value 15, 12,", test)
+        // test = await Contract.fromBigNumber(21356479,31)
+        // console.log("======toBigNumber=====","Input value 15, 12,", test)
         // console.log("================== =====================")
         // for(let i = 0; i < 10; i++) {
         //     let exponent1 = Math.round(Math.random() * 223)
