@@ -96,3 +96,20 @@
 | getRatioAtTick | 292805 | 2000 | 840
 | getTickAtRatio | 411721347530044828534398204668445426249575 | 2584 | 1025
 
+ <br/>
+
+## GasFee between Upgradable and non-Upgradable contract
+
+Tested with addThree() in "./contracts/Proxy_GasFee/Add.sol"
+
+| function name | upgradable | no-upgradable
+| ------ | ------ | ------
+| addThree | 28216 | 22113
+
+Difference between them is 6,103.
+
+you can check this via here.
+https://goerli.etherscan.io/tx/0x6800863f99244aa0d16651d53a876c65110ee19db7ccb45ab28108cb07fac2e2#eventlog
+or
+https://goerli.etherscan.io/tx/0x7392df38d5c293f692f8d0f54ea9346a7d99b9863f66a8f2334c18ecc6b52728#eventlog
+
