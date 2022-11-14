@@ -5,7 +5,7 @@ contract Base {
     address public owner;
     uint public foo;
 
-    constructor(address _owner, uint _foo) payable {
+    constructor(address _owner, uint _foo) {
         owner = _owner;
         foo = _foo;
     }

@@ -11,6 +11,9 @@ let Factory2
 let Contract3
 let Factory3
 
+let Contract4
+let Factory4
+
 describe("Factory", function () {
     beforeEach(async function () {
         Factory = await ethers.getContractFactory('FactoryAssembly')
@@ -21,6 +24,9 @@ describe("Factory", function () {
 
         Factory3 = await ethers.getContractFactory('Base')
         Contract3 = await Factory3.deploy("0xf827c3E5fD68e78aa092245D442398E12988901C", "100")
+
+        Factory4 = await ethers.getContractFactory('NormalFactory')
+        Contract4 = await Factory4.deploy()
     })
 
     it("testing...", async function () {
@@ -34,7 +40,12 @@ describe("Factory", function () {
         test = await Contract.deploy("0xf827c3E5fD68e78aa092245D442398E12988901C", "100", "1")
         test = await test.wait();
         // console.log("Minimal Factory", test.logs[0].data)
-        console.log("Normal Factory", ethers.BigNumber.from(test.logs[0].data).toString())
+        console.log("Factory", ethers.BigNumber.from(test.logs[0].data).toString())
+
+        test = await Contract4.deploy("0xf827c3E5fD68e78aa092245D442398E12988901C", "100")
+        test = await test.wait();
+        // console.log("Minimal Factory", test.logs[0].data)
+        console.log("Normal clone", ethers.BigNumber.from(test.logs[0].data).toString())
 
     });
 });

@@ -119,9 +119,8 @@ https://goerli.etherscan.io/tx/0x7392df38d5c293f692f8d0f54ea9346a7d99b9863f66a8f
 
 Tested in "./contracts/CloneFactory" directory.
 
-| Minimal Factory | Normal Factory
-| ------ | ------ 
-| 41143 | 113870
+| Minimal Factory | Clone Factory using create2 | Normal Factory
+| ------ | ------ | ------ 
+| 41143 | 113870 | 112216
 
-Difference between them is 72,727.
 
