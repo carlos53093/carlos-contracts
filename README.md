@@ -123,4 +123,5 @@ Tested in "./contracts/CloneFactory" directory.
 | ------ | ------ | ------ 
 | 41143 | 113870 | 112216
 
+**Minimal proxy clone < Normal clone < create2**
 
