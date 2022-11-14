@@ -98,7 +98,7 @@
 
  <br/>
 
-## GasFee defference between Upgradable and non-Upgradable contract
+## GasFee difference between Upgradable and non-Upgradable contract
 
 Tested with addThree() in "./contracts/Proxy_GasFee/Add.sol"
 
@@ -115,7 +115,7 @@ https://goerli.etherscan.io/tx/0x7392df38d5c293f692f8d0f54ea9346a7d99b9863f66a8f
 
 <br />
 
-## GasFee defference between Normal clone and Minimal clone contract
+## Deployment GasFee difference between Normal clone and Minimal clone contract
 
 Tested in "./contracts/CloneFactory" directory.
 
