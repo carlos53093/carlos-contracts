@@ -98,7 +98,7 @@
 
  <br/>
 
-## GasFee between Upgradable and non-Upgradable contract
+## GasFee defference between Upgradable and non-Upgradable contract
 
 Tested with addThree() in "./contracts/Proxy_GasFee/Add.sol"
 
@@ -112,4 +112,16 @@ you can check this via here.
 https://goerli.etherscan.io/tx/0x6800863f99244aa0d16651d53a876c65110ee19db7ccb45ab28108cb07fac2e2#eventlog
 or
 https://goerli.etherscan.io/tx/0x7392df38d5c293f692f8d0f54ea9346a7d99b9863f66a8f2334c18ecc6b52728#eventlog
+
+<br />
+
+## GasFee defference between Normal clone and Minimal clone contract
+
+Tested in "./contracts/CloneFactory" directory.
+
+| Minimal Factory | Normal Factory
+| ------ | ------ 
+| 41143 | 113870
+
+Difference between them is 72,727.
 
