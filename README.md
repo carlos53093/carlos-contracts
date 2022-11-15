@@ -125,3 +125,14 @@ Tested in "./contracts/CloneFactory" directory.
 
 **Minimal proxy clone < Normal clone < create2**
 
+<br />
+
+Calling function in MinimalFatory and NormalClone
+
+| Function name | Minimal Proxy | Normal clone
+| ------ | ------ | ------ 
+| getFoo() | 5515 | 610
+| setFoo(uint256) | 25698 | 729
+| getOwner | 5648 | 773
+| setOwner(address) | 25792 | 875
+

@@ -8,8 +8,11 @@ contract NormalFactory {
     event GasFee(uint256);
 
     function deploy(address _owner, uint _foo) public {
+        Base b = new Base(_owner, _foo);
         uint256 initialGas = gasleft();
-        new Base(_owner, _foo);
+        // uint foo = b.getFoo(); 
+        // b.setFoo(100);
+        b.setOwner(0xf827c3E5fD68e78aa092245D442398E12988901C);
         emit GasFee(initialGas - gasleft());
     }
 }
