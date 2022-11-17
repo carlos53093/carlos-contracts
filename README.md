@@ -119,20 +119,17 @@ https://goerli.etherscan.io/tx/0x7392df38d5c293f692f8d0f54ea9346a7d99b9863f66a8f
 
 Tested in "./contracts/CloneFactory" directory.
 
-| Minimal Factory | Clone Factory using create2 | Normal Factory
-| ------ | ------ | ------ 
-| 41143 | 113870 | 112216
+| Minimal Factory | Normal Factory
+| ------ | ------ 
+| 41131 | 199108
 
-**Minimal proxy clone < Normal clone < create2**
 
 <br />
 
-Calling function in MinimalFatory and NormalClone
+## Calling function in MinimalFatory and NormalClone
 
-| Function name | Minimal Proxy | Normal clone
+| Function name | Minimal | Normal
 | ------ | ------ | ------ 
-| getFoo() | 5515 | 610
-| setFoo(uint256) | 25698 | 729
-| getOwner | 5648 | 773
-| setOwner(address) | 25792 | 875
+| getOwner | 6016 | 3099
+| setOwner(address) | 26306 | 23166
 

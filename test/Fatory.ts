@@ -42,11 +42,18 @@ describe("Factory", function () {
         // // console.log("Minimal Factory", test.logs[0].data)
         // console.log("Factory", ethers.BigNumber.from(test.logs[0].data).toString())
 
-        test = await Contract4.deploy("0xf827c3E5fD68e78aa092245D442398E12988901C", "100")
+        test = await Contract4.deploy("0xf827c3E5fD68e78aa092245D442398E12988901C", "1000")
         test = await test.wait();
         // console.log("Minimal Factory", test.logs[0].data)
         console.log("Normal clone", ethers.BigNumber.from(test.logs[0].data).toString())
-        
+
+
+        test = await Contract3.setFoo("123");
+        test = await test.wait();
+        // console.log("Log================", ethers.BigNumber.from(test.logs[0].data).toString())
+        // test = await Contract3.getFoo()
+        // console.log(test.toString())
+
 
     });
 });
