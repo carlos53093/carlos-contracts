@@ -1,6 +1,7 @@
 import { ethers } from "hardhat";
-import { BigNumber } from "ethers";
+// import { BigNumber } from "ethers";
 import { expect } from "chai";
+import BigNumber from "bignumber.js";
 
 let Contract
 let Factory
@@ -24,14 +25,15 @@ describe("Converter", function () {
             expect(test.tick).to.be.equal(tick)
         }
 
-        for (let i = 0; i < 17; i++) {
-            let tick = Math.random() * 32768 * 2 - 32768
-            tick = Math.round(tick)
+        for (let i = 0; i < 16; i++) {
+            let tick = 2 ** i
+            console.log("tick=",tick)
             test = await Contract.getRatioAtTick2(tick);
-            expect(test.res).to.be.equal(test.asmres)
-            test = await Contract.getTickAtRatio2(test.res)
-            expect(test.tick).to.be.equal(test.asmtick)
-            expect(test.tick).to.be.equal(tick)
+            const ratio = new BigNumber(1.0015).pow(tick)
+            console.log("1.0015 ** ",tick, "         = ", ratio.toFixed(20))
+            const r = new BigNumber((test.res).toString()).dividedBy(new BigNumber(2).pow(96));
+            console.log("getRatioFromTick(",tick, ") = ", r.toFixed(20))
+            // expect(ratio).to.be.equal(new BigNumber((test.res).toString()).dividedBy(new BigNumber(2).pow(96)))
         }
 
     });

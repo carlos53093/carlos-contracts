@@ -56,7 +56,7 @@ library TickMath {
         assembly{
             let absTick_ := tick
             absTick_ := sub(xor(tick, sar(255, tick)), sar(255, tick))
-            if eq(absTick_, MAX_TICK) {
+            if gt(absTick_, MAX_TICK) {
                 revert(0, 0)
             }
             let factor_ := FACTOR00
